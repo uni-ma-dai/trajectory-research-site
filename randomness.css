@@ -35,3 +35,4 @@
 #measured-results .fold-diagnostics table{table-layout:fixed;min-width:1180px}
 #measured-results .fold-diagnostics th,#measured-results .fold-diagnostics td{width:7%;padding:10px 8px}
 #measured-results .fold-diagnostics th:last-child,#measured-results .fold-diagnostics td:last-child{width:37%;white-space:normal;overflow-wrap:anywhere;text-align:left}
+#measured-results .fold-diagnostics th{white-space:normal;line-height:1.4;font-size:18px}
