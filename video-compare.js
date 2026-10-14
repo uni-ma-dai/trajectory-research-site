@@ -35,9 +35,16 @@ async function initComparison(host){
         }catch(e){if(token===generation)info.textContent='评分点暂时无法加载，录像仍可播放。';}
       }
     }
-    if(token!==generation)return;seek.max=maximum;play.disabled=!videos.length;stop.disabled=!videos.length;status.textContent=`已载入 ${videos.length} 路录像。播放后按录像时间对比；停止会返回起点。`;
+    if(token!==generation)return;seek.max=maximum;play.disabled=!videos.length;stop.disabled=!videos.length;status.textContent='';
   }
-  try{const response=await fetch(host.dataset.media+'/'+host.dataset.manifest);if(!response.ok)throw Error(response.status);const data=await response.json();trials=data.trials.filter(t=>t.videos).sort((a,b)=>a.repeat_id-b.repeat_id);for(let i=0;i<trials.length;i+=4){const set=trials.slice(i,i+4),seeds=[...new Set(set.map(t=>t.policy_seed))];const o=make('option',`R${set[0].repeat_id}–R${set.at(-1).repeat_id} · seed ${seeds.join(' / ')}`);o.value=i/4;group.append(o);}group.onchange=load;camera.onchange=load;await load();}catch(e){status.textContent='视频列表读取失败，请刷新页面重试。';play.disabled=stop.disabled=true;}
+  try{const response=await fetch(host.dataset.media+'/'+host.dataset.manifest);if(!response.ok)throw Error(response.status);const data=await response.json();trials=data.trials.filter(t=>t.videos).sort((a,b)=>a.repeat_id-b.repeat_id);if(host.dataset.keypoints){
+ const wrap=make('div');wrap.className='fold-results';const table=make('table');table.setAttribute('aria-label','折衣服二十次运行结果');const head=make('thead'),groups=make('tr'),runs=make('tr');groups.append(make('th','策略 seed'));runs.append(make('th','重复序号'));
+ for(let i=0;i<trials.length;i+=4){const th=make('th',String(trials[i].policy_seed));th.colSpan=Math.min(4,trials.length-i);groups.append(th);}
+ trials.forEach(t=>runs.append(make('th','R'+t.repeat_id)));head.append(groups,runs);const body=make('tbody');
+ for(const [name,value] of [['得分',t=>t.result?.score??'—'],['成功',t=>t.result?.success_rate===1?'是':'否'],['动作步数',t=>t.steps??'—']]){const row=make('tr'),label=make('th',name);label.scope='row';row.append(label);trials.forEach(t=>row.append(make('td',String(value(t)))));body.append(row);}
+ table.append(head,body);wrap.append(table);host.prepend(wrap);
+ }
+ for(let i=0;i<trials.length;i+=4){const set=trials.slice(i,i+4),seeds=[...new Set(set.map(t=>t.policy_seed))];const o=make('option',`R${set[0].repeat_id}–R${set.at(-1).repeat_id} · seed ${seeds.join(' / ')}`);o.value=i/4;group.append(o);}group.onchange=load;camera.onchange=load;await load();}catch(e){status.textContent='视频列表读取失败，请刷新页面重试。';play.disabled=stop.disabled=true;}
   document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});
 }
 document.querySelectorAll('.video-compare').forEach(initComparison);

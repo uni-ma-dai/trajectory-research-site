@@ -15,7 +15,7 @@ const flows = {
     caption: 'RoboDojo × XPolicyLab · 在固定布局中评测策略',
     loop: '↶ 闭环反馈：执行后的新观测返回模型；Pi_05 当前通常执行完一整个 action chunk 才重新推理。',
     nodes: [
-      { title: '恢复初始布局', sub: 'layout → 相同初态', icon: '▧', color: '#edf1e5', heading: '同一场景，先落实到同一份布局', desc: '评测加载保存的 layout，reset 后检查场景稳定性。已有 layout_id 与建议新增的 repeat_id、policy_seed 应分开记录；保存布局不等同于完整的物理引擎快照。', refs: ['seeds', 'layout'] },
+      { title: '恢复初始布局', sub: 'layout → 相同初态', icon: '▧', color: '#edf1e5', heading: '同一场景，先落实到同一份布局', desc: '评测加载保存的 layout，reset 后检查场景稳定性。保存布局不等于完整的物理引擎快照。', refs: ['seeds', 'layout'] },
       { title: '适配模型输入', sub: '图像 / 状态 / 指令', icon: '⇄', color: '#edf2eb', heading: 'wrapper：让环境和模型使用同一种表达', desc: '服务端统一解码 RGB 图像；模型适配器映射相机名、整理图像形状、拼接机器人状态，并交给原生模型的输入变换与归一化。', refs: ['encode', 'pack'] },
       { title: '模型预测动作', sub: 'infer → action chunk', icon: '✧', color: '#f0edf5', heading: '一次推理，产生一段动作', desc: 'Pi_05 调用原生 policy.infer，再将结果拆回各机械臂与夹爪字段。输入配置、checkpoint、归一化统计和采样随机状态都会影响结果。', refs: ['inference', 'unpack'] },
       { title: '执行并反馈', sub: 'action → 实际状态', icon: '↻', color: '#f8efe5', heading: '预测动作与实际运动，要分别记录', desc: 'deploy.py 决定推理和执行节奏。chunk 内更新观测不会自动重算剩余动作；环境把目标交给控制器执行，再获得实际关节、末端和物体状态。', refs: ['deploy', 'takeAction'] },
@@ -24,7 +24,7 @@ const flows = {
   }
 };
 const layers = [
-  { name: '场景与布局', group: 'expert', intent: '改变方块位置、朝向、间距', entry: 'load_actors() / set_saved_layout()', refs: ['actors','layout'], why: '改变机器人面对的初始条件', detail: 'RoboTwin 修改物体采样范围或明确设置位姿；RoboDojo 选择或恢复保存布局。同场景对照应记录布局哈希和实际初态。', watch: '固定 seed 还依赖随机调用顺序；RoboTwin 与 RoboDojo 的布局格式不能直接互换。' },
+  { name: '场景与布局', group: 'expert', intent: '改变方块位置、朝向、间距', entry: 'load_actors()', refs: ['actors'], why: '改变机器人面对的初始条件', detail: '修改物体位置、朝向的采样范围，或直接设置位姿。', watch: '固定 seed 还依赖随机调用顺序；RoboTwin 与 RoboDojo 的布局格式不能直接互换。' },
   { name: '任务动作顺序', group: 'expert', intent: '先抓谁、哪只手、是否同步', entry: 'play_once() → pick_and_place_block()', refs: ['play','pick'], why: '修改任务的操作策略', detail: '改变处理物体的顺序、机械臂选择，或把同步动作拆为顺序动作。检查新的动作序列是否仍符合成功条件和语言指令。', watch: '动作数量或顺序改变后，必须重新生成轨迹缓存，避免左右臂段落错配。' },
   { name: '抓取与放置位姿', group: 'expert', intent: '从哪侧抓、放哪里、朝向如何', entry: 'grasp_actor() / get_place_pose()', refs: ['grasp','choose','transformPlace','basePlace'], why: '控制关键目标，而不是直接修改整段路径', detail: '指定接触点、调整 pre_grasp_dis 或功能点。工具层 get_place_pose 选择物体目标朝向，任务层同名函数计算夹爪应到达的位姿。', watch: '预设朝向是候选选择的偏好，不是最终位姿；新的目标仍需规划与抓取验证。' },
   { name: '空间路径', group: 'expert', intent: '提高抬升、增加经过点、绕行', entry: 'move_by_displacement() → plan_path()', refs: ['displacement','move','planner'], why: '在起点与终点之间，加入可控的几何变化', detail: '最容易理解的实验是只把抓取后的抬升从 0.07 m 改成 0.12 m。也可以增加中间末端目标，分段交给 cuRobo 规划。', watch: '保持朝向的 constraint_pose 不保证直线路径；规划器也不是固定轨迹模板。' },
@@ -33,8 +33,15 @@ const layers = [
   { name: '重复 rollout 与随机性', group: 'policy', intent: '同一布局，多次独立策略采样', entry: 'reset() / infer() / deploy.py', refs: ['reset','nativeInfer','deploy','seeds'], why: '把轨迹差异变成可解释的实验变量', detail: '固定场景、模型和 chunk 执行长度，再显式设置每次 policy_seed。先做相同 seed 的重复性基线，再分析不同 seed 的采样差异。', watch: 'Pi_05 已新增串行实验 seed 接口，显式启用后 reset 重置 RNG；标准评测续跑仍跳过已完成 layout。' },
   { name: '采样、评分与分析', group: 'evaluation', intent: '记录实际轨迹，解释成功与失败', entry: 'get_obs() / get_score() / run_eval()', refs: ['obs','score','reward','runEval','hdf5'], why: '给同分轨迹增加过程证据', detail: '记录实际 qpos、末端与物体位姿、动作 chunk、仿真时间和评分阶段。五类能力不共享一套公式，具体任务分别定义成功条件与阶段分。', watch: '任务分数是离散的。RoboTwin 保存的关节字段使用驱动目标，分析跟踪误差需另外记录实际状态。' }
 ];
+const dojoLayers = [
+ {name:'场景布局',intent:'选择布局、恢复物体位姿',entry:'init_eval() / set_saved_layout()',refs:['seeds','layout'],detail:'评测读取保存的布局，恢复物体位置与朝向。'},
+ {name:'模型输入输出',intent:'相机、状态与动作格式',entry:'encode_obs() / get_action_batch()',refs:['encode','pack','inference','unpack'],detail:'XPolicyLab 的 Pi_05 适配器负责整理观测和拆分模型动作。'},
+ {name:'动作执行',intent:'动作分段、插值与夹爪裁剪',entry:'eval_one_episode() / take_action_batch()',refs:['deploy','takeAction','dojoControl'],detail:'策略部署入口决定何时再次推理；RoboDojo 控制器执行每个动作目标。'},
+ {name:'策略随机性',intent:'重置模型采样的随机数',entry:'reset() / Policy.infer()',refs:['reset','nativeInfer'],detail:'本地实验为每次运行设置策略 seed；并行实验为各环境维护独立随机数状态。'},
+ {name:'任务评分',intent:'成功条件与阶段得分',entry:'get_score() / run_eval()',refs:['score','reward','runEval'],detail:'任务定义评分条件，RewardManager 更新累计阶段，评测入口汇总结果。'}
+];
 const palette = ['#e9eedf','#e4eee4','#eee8f4','#f6eadc','#f1eadf','#e5eef1','#ebe7f2','#e7ede4'];
-let activeFlow = 'expert';
+let activeFlow = document.body.dataset.benchmark || 'expert';
 let selectedNode = 0;
 let activeSource = null;
 const $ = id => document.getElementById(id);
@@ -44,14 +51,14 @@ function codeButton(id) {
   const label=el('span'); label.append(el('code','',s?.symbol || id),el('small','',s?.file || '加载代码入口…')); btn.append(label,el('span','arrow','↗')); btn.addEventListener('click',()=>showSource(id)); return btn;
 }
 function renderFlow() {
-  const f=flows[activeFlow]; $('flow-caption').textContent=f.caption; $('loop-note').textContent=f.loop;
-  $('flow-panel').setAttribute('aria-labelledby',`tab-${activeFlow}`); $('flow-nodes').replaceChildren();
-  f.nodes.forEach((n,i)=>{const b=el('button',`flow-node ${i===selectedNode?'active':''}`);b.type='button';b.style.setProperty('--node-bg',n.color);b.setAttribute('aria-pressed',i===selectedNode);const t=el('span','node-top');t.append(el('span','node-num',`0${i+1}`),el('span','node-icon',n.icon));b.append(t,el('span','node-title',n.title),el('span','node-sub',n.sub));b.addEventListener('click',()=>{selectedNode=i;renderFlow();$('flow-nodes').children[i].focus({preventScroll:true});});$('flow-nodes').append(b);});
-  const n=f.nodes[selectedNode]; const copy=el('div');copy.append(el('span','detail-kicker',`STEP 0${selectedNode+1} / ${activeFlow==='expert'?'EXPERT DEMONSTRATION':'POLICY ROLLOUT'}`),el('h3','detail-title',n.heading),el('p','detail-desc',n.desc));const codes=el('div','detail-codes');n.refs.forEach(id=>codes.append(codeButton(id)));$('flow-detail').replaceChildren(copy,codes);
+  const f=flows[activeFlow];
+  $('flow-nodes').replaceChildren();
+  f.nodes.forEach((n,i)=>{const b=el('button',`flow-node ${i===selectedNode?'active':''}`);b.type='button';b.style.setProperty('--node-bg',n.color);b.setAttribute('aria-pressed',i===selectedNode);b.append(el('span','node-title',n.title));b.addEventListener('click',()=>{selectedNode=i;renderFlow();$('flow-nodes').children[i].focus({preventScroll:true});});$('flow-nodes').append(b);});
+  const n=f.nodes[selectedNode]; const copy=el('div');copy.append(el('h3','detail-title',n.title),el('p','detail-desc',n.desc));const codes=el('div','detail-codes');n.refs.forEach(id=>codes.append(codeButton(id)));$('flow-detail').replaceChildren(copy,codes);
 }
 function renderLayers(filter='all') {
-  $('layer-list').replaceChildren(); const filtered=layers.filter(l=>filter==='all'||l.group===filter); $('layer-count').textContent=`${filtered.length} 个修改层次`;
-  filtered.forEach(l=>{const i=layers.indexOf(l),d=el('details','layer'),s=el('summary');d.style.setProperty('--row-bg',palette[i]);const name=el('span','layer-name');name.append(el('span','layer-number',`0${i+1}`),el('span','',l.name));const entry=el('span','layer-entry');entry.append(el('code','',l.entry),el('span','expand','+'));s.append(name,el('span','layer-intent',l.intent),entry);const body=el('div','layer-expanded'),why=el('div','layer-explanation');why.append(el('strong','',l.why),el('p','',l.detail),el('p','watch',l.watch));const codes=el('div','layer-code-list');l.refs.forEach(id=>codes.append(codeButton(id)));body.append(why,codes);d.append(s,body);$('layer-list').append(d);});
+  $('layer-list').replaceChildren(); const filtered=activeFlow==='expert'?layers.filter(l=>l.group==='expert'):dojoLayers;
+  filtered.forEach(l=>{const i=layers.indexOf(l),d=el('details','layer'),s=el('summary');d.style.setProperty('--row-bg',palette[i]);const name=el('span','layer-name');name.append(el('span','',l.name));const entry=el('span','layer-entry');entry.append(el('code','',l.entry),el('span','expand','+'));s.append(name,el('span','layer-intent',l.intent),entry);const body=el('div','layer-expanded'),why=el('div','layer-explanation');why.append(el('p','',l.detail));const codes=el('div','layer-code-list');l.refs.forEach(id=>codes.append(codeButton(id)));body.append(why,codes);d.append(s,body);$('layer-list').append(d);});
 }
 function showSource(id) {
   const s=sources[id]; if(!s)return; activeSource=s;

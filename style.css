@@ -100,3 +100,12 @@ pre { font-family: var(--code-font); font-size: 15px; }
 }
 .report-header{height:auto!important;min-height:112px;align-items:flex-start;padding-top:20px;padding-bottom:18px;gap:26px}.page-directory{flex:1;max-width:900px}.page-directory nav,.page-descriptions{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px!important}.page-directory nav{margin:0!important;font-size:20px!important;line-height:1.4}.page-descriptions{margin-top:8px;color:#7a8877;font-size:16px;line-height:1.5}.report-header .brand{white-space:nowrap}.official-code-link{cursor:pointer}a.official-code-link:focus-visible{outline:2px solid #55785b;outline-offset:4px}
 @media(max-width:800px){.report-header{flex-wrap:wrap}.page-directory{flex-basis:100%}.page-directory nav{font-size:17px!important}.page-directory nav,.page-descriptions{gap:12px!important}.page-descriptions{font-size:14px}}
+
+/* Compact benchmark-specific report */
+.page-title{font-size:38px;margin:42px 0 30px;line-height:1.3}
+.page-directory nav{grid-template-columns:repeat(4,auto);gap:24px}
+.flow-node{min-height:120px;justify-content:center}.flow-node::after{display:none}.node-title{margin:0}
+.flow-board{padding:24px}.flow-detail{margin-top:16px;padding:24px}.detail-desc{font-size:20px}
+.category-row{grid-template-columns:1fr 2fr!important}.metric-table{width:100%;border-collapse:collapse}.metric-table th,.metric-table td{padding:12px 16px;text-align:left;border-bottom:1px solid #dce3d8}.metric-table th{background:#edf2e7}.not-implemented{background:#eeefef;color:#777}
+.fold-results{overflow-x:auto;margin:12px 0 24px}.fold-results table{width:100%;border-collapse:collapse;font-size:17px;white-space:nowrap}.fold-results th,.fold-results td{padding:8px 10px;text-align:center;border:1px solid #dce3d8}.fold-results thead{background:#edf2e7}.fold-results th[scope=row]{text-align:left}.fold-results tbody tr:nth-child(2n){background:#f0edf5}
+@media(max-width:750px){.page-directory nav{grid-template-columns:repeat(2,1fr)}.page-title{font-size:30px}}
