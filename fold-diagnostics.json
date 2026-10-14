@@ -1,0 +1,3225 @@
+{
+  "rows": [
+    {
+      "repeat_id": 0,
+      "policy_seed": 0,
+      "first": {
+        "frame": 276,
+        "step": 276,
+        "score": 20.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": true,
+          "RH": true,
+          "angle": true
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": -0.02287578560478196,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.022747039776969246,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": -0.02901840181874038,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.02682495109603283,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": 0.0333509442062315,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.046628951644289374,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": -0.027825355243797496,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": -0.011529922064053486,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 29.621181756593504,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "final": {
+        "frame": 292,
+        "step": 292,
+        "score": 100.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": true,
+          "RH": true,
+          "angle": true
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": -0.02301788307690972,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.023533821077025705,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": -0.027420997355107828,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.027762412926944986,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": -0.04773139902731355,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.0779676424714113,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": -0.03454685175810144,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": -0.013269423955235544,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 26.57430149519151,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "success": true,
+      "score": 100.0,
+      "note": "首次折叠到位，随后成功。"
+    },
+    {
+      "repeat_id": 1,
+      "policy_seed": 0,
+      "first": {
+        "frame": 277,
+        "step": 277,
+        "score": 20.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": true,
+          "RH": true,
+          "angle": true
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": -0.027907371259396005,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.05467891660412911,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.004177093452626067,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.03908252678949856,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": -0.05524921360863523,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.012246131182830525,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": 0.023165702598856915,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": -0.007079124297654923,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 3.2619807050133183,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "final": {
+        "frame": 293,
+        "step": 293,
+        "score": 100.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": true,
+          "RH": true,
+          "angle": true
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": -0.03007793397999434,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.05000781987192448,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.007402419958692767,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.03787040671801885,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": -0.04512405349860847,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.007356166372236434,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": 0.03744983636069205,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": 0.0011911390848375054,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 4.272790953792867,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "success": true,
+      "score": 100.0,
+      "note": "首次折叠到位，随后成功。"
+    },
+    {
+      "repeat_id": 2,
+      "policy_seed": 0,
+      "first": {
+        "frame": 276,
+        "step": 276,
+        "score": 20.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": true,
+          "RH": true,
+          "angle": true
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": -0.04707908584501846,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.04011598225983584,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.011953353753248162,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.033456787113259015,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": -0.0610246651992928,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.05650863685915253,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": -0.02078628519034437,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": 0.006634228138399813,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 22.941025312073236,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "final": {
+        "frame": 292,
+        "step": 292,
+        "score": 100.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": true,
+          "RH": true,
+          "angle": true
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": -0.04333782153724617,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.03553219139261383,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.012297630178040747,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.0328702103515471,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": -0.0862970343290084,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.07016017525360058,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": -0.01235485065114546,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": 0.023309133863255924,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 27.97383904633081,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "success": true,
+      "score": 100.0,
+      "note": "首次折叠到位，随后成功。"
+    },
+    {
+      "repeat_id": 3,
+      "policy_seed": 0,
+      "first": {
+        "frame": 276,
+        "step": 276,
+        "score": 20.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": true,
+          "RH": true,
+          "angle": true
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": -0.026029586537617642,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.023370742801200016,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.03194045987344609,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.042349814781839475,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": -0.03199195828755884,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.022202968058985813,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": 0.02954864472258855,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": 0.014317035424804041,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 11.7968533605771,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "final": {
+        "frame": 292,
+        "step": 292,
+        "score": 100.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": true,
+          "RH": true,
+          "angle": true
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": -0.0248546597903883,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.020041942626329502,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.03149604764632545,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.04269361437245098,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": -0.032875060694659494,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.025444030185586785,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": 0.01269340501797089,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": 0.025339603142513746,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 17.556063953271984,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "success": true,
+      "score": 100.0,
+      "note": "首次折叠到位，随后成功。"
+    },
+    {
+      "repeat_id": 4,
+      "policy_seed": 1,
+      "first": {
+        "frame": 274,
+        "step": 274,
+        "score": 20.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": true,
+          "RH": true,
+          "angle": true
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": -0.009592056175378196,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": -0.005992889245570885,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.02943325013018951,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.01249217958445665,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": -0.012459277966558581,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.032385825564255954,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": 0.05907154026366173,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": -0.05667877173333435,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 5.166600488958926,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "final": {
+        "frame": 289,
+        "step": 289,
+        "score": 100.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": true,
+          "RH": true,
+          "angle": true
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": -0.00955867757392528,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": -0.007977485477049611,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.03060531585327869,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.01184082001674471,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": -0.003531932783360898,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.028655051800756417,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": 0.061419486408707334,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": -0.06154251071761614,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 8.247904607519033,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "success": true,
+      "score": 100.0,
+      "note": "首次折叠到位，随后成功。"
+    },
+    {
+      "repeat_id": 5,
+      "policy_seed": 1,
+      "first": {
+        "frame": 281,
+        "step": 281,
+        "score": 0.0,
+        "passed": {
+          "LS": true,
+          "RS": false,
+          "LH": false,
+          "RH": false,
+          "angle": true
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": 0.011191844839370135,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": -0.024940490471217512,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.3771519623661329,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": false
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": -0.12403869763623851,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": -0.046853541769743504,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.26431560217109124,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": false
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": 0.0629181856455827,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": -0.25634336256182744,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": false
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 2.48872148676306,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "final": {
+        "frame": 500,
+        "step": 500,
+        "score": 0.0,
+        "passed": {
+          "LS": true,
+          "RS": false,
+          "LH": true,
+          "RH": true,
+          "angle": true
+        },
+        "grippers_open": false,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": 0.007580280223109606,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.022441386972435542,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.4077458341032109,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": false
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": -0.04425525902473267,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": 0.005208969086856611,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.05218648846723464,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": 0.03385925260511442,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": -0.017676353276497043,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 12.2363773791457,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "success": false,
+      "score": 0.0,
+      "note": "RS 未折到位；末帧仍未通过。"
+    },
+    {
+      "repeat_id": 6,
+      "policy_seed": 1,
+      "first": {
+        "frame": 274,
+        "step": 274,
+        "score": 20.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": true,
+          "RH": true,
+          "angle": true
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": -0.011057853595568823,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.029008507583256585,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.03818321188205446,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.05588591023367313,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": -0.04499340011302871,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.02106857236717858,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": 0.019497394382385683,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": -0.021840333614105024,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 0.009170130050402748,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "final": {
+        "frame": 290,
+        "step": 290,
+        "score": 100.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": true,
+          "RH": true,
+          "angle": true
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": -0.00748634331568323,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.026742100565202664,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.039700030868369075,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.05219530986485867,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": -0.044285773774160896,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.031269668812266185,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": -0.002361774417441409,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": -0.00282609450753647,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 10.889462000787706,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "success": true,
+      "score": 100.0,
+      "note": "首次折叠到位，随后成功。"
+    },
+    {
+      "repeat_id": 7,
+      "policy_seed": 1,
+      "first": {
+        "frame": 275,
+        "step": 275,
+        "score": 20.0,
+        "passed": {
+          "LS": true,
+          "RS": false,
+          "LH": false,
+          "RH": true,
+          "angle": false
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": 0.010135650526751349,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.02222824069780496,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.1426200852340509,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": false
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.03144740930532573,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": 0.03774261443224761,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.18329620198329252,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": false
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": 0.051904677833468145,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": -0.014302253853087681,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 52.76980772952818,
+            "upper": 45,
+            "passed": false
+          }
+        ]
+      },
+      "final": {
+        "frame": 500,
+        "step": 500,
+        "score": 20.0,
+        "passed": {
+          "LS": true,
+          "RS": false,
+          "LH": false,
+          "RH": true,
+          "angle": true
+        },
+        "grippers_open": false,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": 0.016198158096366915,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.019688605976313448,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.17018318005199445,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": false
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.028738020405034218,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": 0.03826522794886058,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.17275810089634314,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": false
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": 0.07590007707797675,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": -0.042019844072815296,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 40.622715833113006,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "success": false,
+      "score": 20.0,
+      "note": "LH 未折到位；RS 后续也偏出范围。"
+    },
+    {
+      "repeat_id": 8,
+      "policy_seed": 2,
+      "first": {
+        "frame": 276,
+        "step": 276,
+        "score": 20.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": false,
+          "RH": true,
+          "angle": false
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": -0.032000541366081214,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.0016889574631825798,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.029591798472301447,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.04806899961701627,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": 0.03838586776036707,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.21009540371038538,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": false
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": -0.008037090224227132,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": 0.015704154931023943,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 75.29157350468824,
+            "upper": 45,
+            "passed": false
+          }
+        ]
+      },
+      "final": {
+        "frame": 500,
+        "step": 500,
+        "score": 20.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": false,
+          "RH": true,
+          "angle": false
+        },
+        "grippers_open": false,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": -0.03154206244527073,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.004055023373752829,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.02342462514311884,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.06368732378376332,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": 0.049226045189318134,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.21516227538852586,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": false
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": 0.017906427197147034,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": 0.024504661220520658,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 69.99679450249681,
+            "upper": 45,
+            "passed": false
+          }
+        ]
+      },
+      "success": false,
+      "score": 20.0,
+      "note": "LH 未到位，衣摆夹角未通过。"
+    },
+    {
+      "repeat_id": 9,
+      "policy_seed": 2,
+      "first": {
+        "frame": 276,
+        "step": 276,
+        "score": 20.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": true,
+          "RH": true,
+          "angle": true
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": -0.1029003848515957,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.07556462287868648,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.022614538439543835,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.016409635269987028,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": -0.0031311511645435164,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.0024976729105727277,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": -0.012733518927784383,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": -0.03757691308995644,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 18.96247309647175,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "final": {
+        "frame": 500,
+        "step": 500,
+        "score": 20.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": true,
+          "RH": false,
+          "angle": true
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": -0.09649264718393219,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.07647943491643121,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.03770244083769318,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.007259130191627632,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": 0.0030773281981545434,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.06312894752525088,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": 0.046888172211009195,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": -0.15203475825836266,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": false
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 26.527143499367007,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "success": false,
+      "score": 20.0,
+      "note": "首次衣摆释放时几何通过，后续 RH 偏出范围；最终未成功。"
+    },
+    {
+      "repeat_id": 10,
+      "policy_seed": 2,
+      "first": {
+        "frame": 276,
+        "step": 276,
+        "score": 20.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": false,
+          "RH": true,
+          "angle": false
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": 0.008058309450116685,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.07159614484901893,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.038059055413271974,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.040529727332704865,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": 0.011480033363142227,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.2344732261452106,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": false
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": 0.02954059810200066,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": -0.002818584502791668,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 63.018891874846716,
+            "upper": 45,
+            "passed": false
+          }
+        ]
+      },
+      "final": {
+        "frame": 478,
+        "step": 478,
+        "score": 100.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": true,
+          "RH": true,
+          "angle": true
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": 0.016164958291841548,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.06889271654892834,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.005381643683546528,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.10069560897454861,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": 0.07775217216597939,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": 0.01775097782680634,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": 0.06767749720427943,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": -0.04186511035411357,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 26.085003505348787,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "success": true,
+      "score": 100.0,
+      "note": "首次 LH 与夹角未通过；重新抓取调整后成功。"
+    },
+    {
+      "repeat_id": 11,
+      "policy_seed": 2,
+      "first": {
+        "frame": 275,
+        "step": 275,
+        "score": 20.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": true,
+          "RH": true,
+          "angle": true
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": -0.020859479709956864,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.04601001711115227,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.05850219667235556,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.026468276325644448,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": -0.031880378402229494,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": 0.007790565772298486,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": 0.03972578010593164,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": -0.02393913249025682,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 7.217769486706935,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "final": {
+        "frame": 291,
+        "step": 291,
+        "score": 100.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": true,
+          "RH": true,
+          "angle": true
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": -0.022235870150801532,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.040610313216589644,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.061128615714001376,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.02491187983873322,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": -0.05410551970793367,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": 0.007982254385542616,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": 0.06369280753684502,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": -0.05754089332769416,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 11.517153490822208,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "success": true,
+      "score": 100.0,
+      "note": "首次折叠到位，随后成功。"
+    },
+    {
+      "repeat_id": 12,
+      "policy_seed": 3,
+      "first": {
+        "frame": 276,
+        "step": 276,
+        "score": 20.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": false,
+          "RH": true,
+          "angle": false
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": -0.013242721433695996,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.030705451803019458,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.03242969480828188,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": -0.0017004014377979785,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": 0.019958495975432075,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.2398023582539515,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": false
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": 0.05225181528414718,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": -0.012514114425477924,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 58.71811645947788,
+            "upper": 45,
+            "passed": false
+          }
+        ]
+      },
+      "final": {
+        "frame": 500,
+        "step": 500,
+        "score": 20.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": false,
+          "RH": true,
+          "angle": false
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": 0.017247199828413082,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.03207588150151472,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.012081146117468793,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.011667251443823759,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": -0.005475997783033333,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.25611591076300455,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": false
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": -0.033032416969359046,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": 0.01683807388884788,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 70.60397820935242,
+            "upper": 45,
+            "passed": false
+          }
+        ]
+      },
+      "success": false,
+      "score": 20.0,
+      "note": "主要是 LH 与夹角未通过；中途 RH 也曾偏出范围。"
+    },
+    {
+      "repeat_id": 13,
+      "policy_seed": 3,
+      "first": {
+        "frame": 277,
+        "step": 277,
+        "score": 20.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": true,
+          "RH": true,
+          "angle": true
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": 0.004011154117493462,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.05585718100830216,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.038980483612632316,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.025487422482288306,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": -0.032716750760941854,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.024951219019488564,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": 0.01984405496828892,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": 0.03306901414094084,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 19.74664639769696,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "final": {
+        "frame": 293,
+        "step": 293,
+        "score": 100.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": true,
+          "RH": true,
+          "angle": true
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": 0.0068368910883603055,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.056174396896787326,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.040405273027966655,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.023108124288164663,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": -0.03264522518678065,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.02823471965729032,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": 0.023066520452692106,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": 0.02846288642405476,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 19.039834534867396,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "success": true,
+      "score": 100.0,
+      "note": "首次折叠到位，随后成功。"
+    },
+    {
+      "repeat_id": 14,
+      "policy_seed": 3,
+      "first": {
+        "frame": 277,
+        "step": 277,
+        "score": 20.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": true,
+          "RH": true,
+          "angle": true
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": -0.03061056107539302,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.037005424393942055,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": -0.01592397675689004,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.056305408053743594,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": -0.01887559871304805,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.0040073391801394515,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": 0.023290157111648772,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": -0.058342933033028635,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 17.54601094623464,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "final": {
+        "frame": 500,
+        "step": 500,
+        "score": 20.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": true,
+          "RH": true,
+          "angle": true
+        },
+        "grippers_open": false,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": -0.008802890707106171,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.05015993072187672,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": -0.03534030879891033,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.010389327975957168,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": 0.02419614765916255,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": 0.08200502325970047,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": -0.06489705976874534,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": 0.07285022710820746,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 13.817648794541507,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "success": false,
+      "score": 20.0,
+      "note": "首次与末帧几何均通过，中途 RH 与夹角反复越界；末帧夹爪未全开，最终未成功。"
+    },
+    {
+      "repeat_id": 15,
+      "policy_seed": 3,
+      "first": {
+        "frame": 277,
+        "step": 277,
+        "score": 20.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": false,
+          "RH": true,
+          "angle": false
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": -0.022698879022030907,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.02580642694791276,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": -0.007343769016734236,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.05261230424113658,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": 0.02482318861118231,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.22802448058721403,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": false
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": -0.017004966574604916,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": 0.031240463111509704,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 77.29645583222388,
+            "upper": 45,
+            "passed": false
+          }
+        ]
+      },
+      "final": {
+        "frame": 479,
+        "step": 479,
+        "score": 100.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": true,
+          "RH": true,
+          "angle": true
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": -0.011425018206267169,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.03439807870005664,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": -0.019444465454646793,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.030960082789721878,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": 0.07442760389095851,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": 0.1203346235347611,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": 0.07245302126452516,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": 0.04305839446238026,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 31.063758944111253,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "success": true,
+      "score": 100.0,
+      "note": "首次 LH 与夹角未通过；重新抓取调整后成功。"
+    },
+    {
+      "repeat_id": 16,
+      "policy_seed": 4,
+      "first": {
+        "frame": 276,
+        "step": 276,
+        "score": 20.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": true,
+          "RH": true,
+          "angle": true
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": -0.04550743058946393,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.046667575726531685,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": -0.0006389617986867509,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.045097827525143824,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": -0.023143768075399394,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": 0.004317283898655601,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": -0.046974181644264035,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": -0.027221202083823722,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 18.985332549571755,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "final": {
+        "frame": 291,
+        "step": 291,
+        "score": 100.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": true,
+          "RH": true,
+          "angle": true
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": -0.04523849443371608,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.04357099525523898,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": -0.0019512176434116188,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.039727687504210865,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": -0.02893447847039157,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": 0.009907722672992227,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": -0.03714179955132819,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": 0.0016355518273646337,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 4.908970094235795,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "success": true,
+      "score": 100.0,
+      "note": "首次折叠到位，随后成功。"
+    },
+    {
+      "repeat_id": 17,
+      "policy_seed": 4,
+      "first": {
+        "frame": 276,
+        "step": 276,
+        "score": 20.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": true,
+          "RH": true,
+          "angle": true
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": 0.0040512084495941325,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.020712822468768,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.013304710266446907,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": -0.031537189835668514,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": -0.0363264080147416,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.017106897633312173,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": 0.042201995433531085,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": -0.006210204331925932,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 5.15641888672183,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "final": {
+        "frame": 291,
+        "step": 291,
+        "score": 100.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": true,
+          "RH": true,
+          "angle": true
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": 0.004145622206299639,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.0199619231629358,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.012441635018824882,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": -0.03193064008698895,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": -0.04417133286218904,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.021073907037771338,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": 0.042827605781189,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": -0.015272986195844959,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 3.8287774471570106,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "success": true,
+      "score": 100.0,
+      "note": "首次折叠到位，随后成功。"
+    },
+    {
+      "repeat_id": 18,
+      "policy_seed": 4,
+      "first": {
+        "frame": 276,
+        "step": 276,
+        "score": 20.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": true,
+          "RH": true,
+          "angle": true
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": -0.015001296850640958,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.015538692470906007,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.012829780449733852,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.009956359755415582,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": -0.016220092585678914,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.055365084732019766,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": 0.04836177779120358,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": -0.03608798968175492,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 6.196142670224049,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "final": {
+        "frame": 292,
+        "step": 292,
+        "score": 100.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": true,
+          "RH": true,
+          "angle": true
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": -0.015122413486985902,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.013483047501458711,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.009253501801916697,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.0006480217026935738,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": 0.028956413005471412,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.06412267627880017,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": 0.06027889192862563,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": -0.03367471694292898,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 11.529480833347748,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "success": true,
+      "score": 100.0,
+      "note": "首次折叠到位，随后成功。"
+    },
+    {
+      "repeat_id": 19,
+      "policy_seed": 4,
+      "first": {
+        "frame": 276,
+        "step": 276,
+        "score": 20.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": false,
+          "RH": true,
+          "angle": false
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": -0.042554854919975175,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.0034656527943556815,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": 0.025957107272780663,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.04308319039113222,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": 0.04198837245689139,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": -0.21770667838527913,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": false
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": -0.01783752423050979,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": -0.006251334867760542,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 75.45027629344447,
+            "upper": 45,
+            "passed": false
+          }
+        ]
+      },
+      "final": {
+        "frame": 478,
+        "step": 478,
+        "score": 100.0,
+        "passed": {
+          "LS": true,
+          "RS": true,
+          "LH": true,
+          "RH": true,
+          "angle": true
+        },
+        "grippers_open": true,
+        "checks": [
+          {
+            "name": "left_sleeve:right_chest:x",
+            "value": -0.0317630764679372,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_sleeve:right_chest:y",
+            "value": 0.014962196470146846,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:x",
+            "value": -0.010931968591668421,
+            "lower": -0.14,
+            "upper": 0.125,
+            "passed": true
+          },
+          {
+            "name": "right_sleeve:left_chest:y",
+            "value": 0.030616759972768703,
+            "lower": -0.125,
+            "upper": 0.14,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:x",
+            "value": 0.11867713807249904,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "left_hem:left_shoulder:y",
+            "value": 0.0703029617493825,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:x",
+            "value": 0.06411266262464532,
+            "lower": -0.12,
+            "upper": 0.12,
+            "passed": true
+          },
+          {
+            "name": "right_hem:right_shoulder:y",
+            "value": 0.014691352301005437,
+            "lower": -0.095,
+            "upper": 0.17,
+            "passed": true
+          },
+          {
+            "name": "hem_shoulder_angle",
+            "value": 39.386429377768394,
+            "upper": 45,
+            "passed": true
+          }
+        ]
+      },
+      "success": true,
+      "score": 100.0,
+      "note": "首次 LH 与夹角未通过；重新抓取调整后成功。"
+    }
+  ],
+  "basis": "Recorded point checks; first open-gripper sample after frame 240 and final sample. Not a reconstruction of the full reward-manager state."
+}

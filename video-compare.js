@@ -41,8 +41,20 @@ async function initComparison(host){
  const wrap=make('div');wrap.className='fold-results';const table=make('table');table.setAttribute('aria-label','折衣服二十次运行结果');const head=make('thead'),groups=make('tr'),runs=make('tr');groups.append(make('th','策略 seed'));runs.append(make('th','重复序号'));
  for(let i=0;i<trials.length;i+=4){const th=make('th',String(trials[i].policy_seed));th.colSpan=Math.min(4,trials.length-i);groups.append(th);}
  trials.forEach(t=>runs.append(make('th','R'+t.repeat_id)));head.append(groups,runs);const body=make('tbody');
- for(const [name,value] of [['得分',t=>t.result?.score??'—'],['成功',t=>t.result?.success_rate===1?'是':'否'],['动作步数',t=>t.steps??'—']]){const row=make('tr'),label=make('th',name);label.scope='row';row.append(label);trials.forEach(t=>row.append(make('td',String(value(t)))));body.append(row);}
+ for(const [name,value] of [['得分',t=>t.result?.score??'—'],['成功',t=>t.result?.success_rate===1?'✓':'—'],['动作步数',t=>t.steps??'—']]){const row=make('tr'),label=make('th',name);label.scope='row';row.append(label);trials.forEach(t=>row.append(make('td',String(value(t)))));body.append(row);}
  table.append(head,body);wrap.append(table);host.prepend(wrap);
+ const review=make('section');review.className='fold-diagnostics';wrap.after(review);
+ try{const response=await fetch('fold-diagnostics.json');if(!response.ok)throw Error(response.status);const diagnostics=await response.json();
+ review.append(make('h3','评分点到位情况'),make('p','✓ 到位，— 未到位。LS／RS：左右衣袖；LH／RH：左右衣角。到位要求对应的 X、Y 范围同时通过。'));
+ for(const [phase,title] of [['first','首次折衣摆后'],['final','运行结束时']]){
+ review.append(make('h4',title));const scroll=make('div');scroll.className='diagnostic-scroll';const table=make('table'),thead=make('thead'),tr=make('tr');for(const name of ['运行','帧','左袖 LS','右袖 RS','左角 LH','右角 RH','夹角 < 45°','夹爪全开','最终成功','观察结果'])tr.append(make('th',name));thead.append(tr);const tbody=make('tbody');
+ for(const row of diagnostics.rows){const sample=row[phase],tr=make('tr');const mark=v=>v?'✓':'—';const vals=['R'+row.repeat_id,sample.frame,...['LS','RS','LH','RH','angle'].map(k=>mark(sample.passed[k])),mark(sample.grippers_open),mark(row.success),row.note];vals.forEach((value,i)=>{const cell=make('td',String(value));if(value==='✓')cell.className='check-pass';if(value==='—')cell.className='check-fail';tr.append(cell);});tbody.append(tr);}
+ table.append(thead,tbody);scroll.append(table);review.append(scroll);
+ }
+ const evidence=make('a','下载逐项判定数据');evidence.href='fold-diagnostics.json';evidence.target='_blank';review.append(evidence);
+ review.append(make('p','首次表取本批首次折衣摆后张开夹爪的采样帧；末帧表反映最终几何状态。原始分数还受阶段记录与完整成功条件约束。'));
+ }catch(e){review.textContent='评分点汇总加载失败，请刷新重试。';}
+
  }
  for(let i=0;i<trials.length;i+=4){const set=trials.slice(i,i+4),seeds=[...new Set(set.map(t=>t.policy_seed))];const o=make('option',`R${set[0].repeat_id}–R${set.at(-1).repeat_id} · seed ${seeds.join(' / ')}`);o.value=i/4;group.append(o);}group.onchange=load;camera.onchange=load;await load();}catch(e){status.textContent='视频列表读取失败，请刷新页面重试。';play.disabled=stop.disabled=true;}
   document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});
