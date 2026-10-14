@@ -9,12 +9,12 @@ async function refreshSeedResults() {
     const body = document.getElementById('measured-rows'); body.replaceChildren();
     for (const trial of data.trials) {
       const row = document.createElement('tr');
-      for (const value of [trial.repeat_id,trial.policy_seed,labels[trial.status]||trial.status,trial.steps,trial.success_rate==null?'—':trial.success_rate===1?'成功':'未成功',trial.score==null?'—':trial.score.toFixed(1),trial.first_positive_score?trial.first_positive_score.step+' 步 · '+trial.first_positive_score.score+' 分':'—']) {
+      for (const value of [trial.repeat_id,trial.policy_seed,trial.steps,trial.success_rate==null?'—':trial.success_rate===1?'成功':'未成功',trial.score==null?'—':trial.score.toFixed(1),trial.first_positive_score?trial.first_positive_score.step+' 步 · '+trial.first_positive_score.score+' 分':'—']) {
         const cell=document.createElement('td');cell.textContent=value;row.append(cell);
       }
       body.append(row);
     }
-    status.textContent = `已完成 ${data.trials.filter(t=>t.status==='completed').length} / 4 · 数据更新时间 ${new Date(data.updated).toLocaleString()} · 每 15 秒读取最新摘要`;
+    status.textContent = `已完成 ${data.trials.filter(t=>t.status==='completed').length} / 4 · 数据更新时间 ${new Date(data.updated).toLocaleString()} · 固定结果快照`;
     const findings=document.getElementById('measured-findings');findings.replaceChildren();
     if(data.comparisons.some(c=>!c.same_initial_observation)) {const note=document.createElement('p');note.className='accent';note.textContent='归因限制：闭环对照的初始观测并不完全一致，因此闭环差异不能全部归因于 policy_seed。同一观测的离线推理检查是更严格的采样对照。';findings.append(note);}
     const summary=document.createElement('p');
@@ -39,4 +39,4 @@ async function refreshSeedResults() {
     document.getElementById('measured-path').textContent='完整记录：'+data.output_dir;
   } catch(error) { status.textContent='暂时无法读取实验摘要：'+error.message; }
 }
-refreshSeedResults();setInterval(refreshSeedResults,15000);
+refreshSeedResults();

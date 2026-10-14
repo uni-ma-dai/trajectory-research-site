@@ -98,3 +98,5 @@ pre { font-family: var(--code-font); font-size: 15px; }
   .experiment-foot { font-size: 16px; }
   .reading a { font-size: 18px; }
 }
+.report-header{height:auto!important;min-height:112px;align-items:flex-start;padding-top:20px;padding-bottom:18px;gap:26px}.page-directory{flex:1;max-width:900px}.page-directory nav,.page-descriptions{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px!important}.page-directory nav{margin:0!important;font-size:20px!important;line-height:1.4}.page-descriptions{margin-top:8px;color:#7a8877;font-size:16px;line-height:1.5}.report-header .brand{white-space:nowrap}.official-code-link{cursor:pointer}a.official-code-link:focus-visible{outline:2px solid #55785b;outline-offset:4px}
+@media(max-width:800px){.report-header{flex-wrap:wrap}.page-directory{flex-basis:100%}.page-directory nav{font-size:17px!important}.page-directory nav,.page-descriptions{gap:12px!important}.page-descriptions{font-size:14px}}

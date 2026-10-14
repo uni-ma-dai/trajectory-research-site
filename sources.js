@@ -481,5 +481,16 @@ window.SOURCE_REFERENCES = {
     "commit": "ea8b21121ebb3cd201ff5b3fe361944ac94eda3f",
     "end_line": 501,
     "code": "官方代码引用（固定提交）\n\nRoboTwin/envs/_base_task.py\nget_obs()\n提交：ea8b21121ebb3cd201ff5b3fe361944ac94eda3f\n\n点击“查看官方代码”打开原始实现。"
+  },
+  "twinEval": {
+    "file": "RoboTwin/scripts/eval_policy_xpolicylab.py",
+    "symbol": "main()",
+    "line": 270,
+    "end_line": 332,
+    "url": "https://github.com/RoboTwin-Platform/RoboTwin/blob/ea8b21121ebb3cd201ff5b3fe361944ac94eda3f/scripts/eval_policy_xpolicylab.py#L270-L332",
+    "commit": "ea8b21121ebb3cd201ff5b3fe361944ac94eda3f",
+    "verified_symbol": true,
+    "verified_file": true,
+    "code": "官方代码引用（固定提交）\n\nRoboTwin/scripts/eval_policy_xpolicylab.py\nmain()\n提交：ea8b21121ebb3cd201ff5b3fe361944ac94eda3f\n\n点击“查看官方代码”打开原始实现。"
   }
 };
