@@ -1,0 +1,1114 @@
+{
+  "policy": "Pi_05",
+  "robotwin_checkpoint": 29999,
+  "robodojo_checkpoint": 59999,
+  "robotwin": [
+    {
+      "task": "adjust_bottle",
+      "clean": {
+        "success_rate": 1.0,
+        "successes": 100,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/adjust_bottle/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-09_23-05-38_211061/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "beat_block_hammer",
+      "clean": {
+        "success_rate": 0.86,
+        "successes": 86,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/beat_block_hammer/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-09_23-06-41_779648/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "blocks_ranking_rgb",
+      "clean": {
+        "success_rate": 0.73,
+        "successes": 73,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/blocks_ranking_rgb/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-10_00-08-57_735352/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "blocks_ranking_size",
+      "clean": {
+        "success_rate": 0.46,
+        "successes": 46,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/blocks_ranking_size/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-10_00-01-18_380087/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "click_alarmclock",
+      "clean": {
+        "success_rate": 0.59,
+        "successes": 59,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/click_alarmclock/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-10_03-45-14_321154/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "click_bell",
+      "clean": {
+        "success_rate": 0.31,
+        "successes": 31,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/click_bell/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-10_04-30-53_682461/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "dump_bin_bigbin",
+      "clean": {
+        "success_rate": 0.97,
+        "successes": 97,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/dump_bin_bigbin/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-10_04-48-27_727920/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "grab_roller",
+      "clean": {
+        "success_rate": 0.98,
+        "successes": 98,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/grab_roller/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-10_05-50-28_833387/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "handover_block",
+      "clean": {
+        "success_rate": 0.38,
+        "successes": 38,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/handover_block/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-10_06-22-20_915488/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "handover_mic",
+      "clean": {
+        "success_rate": 0.97,
+        "successes": 97,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/handover_mic/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-10_06-31-13_202024/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "hanging_mug",
+      "clean": {
+        "success_rate": 0.23,
+        "successes": 23,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/hanging_mug/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-10_09-22-53_126816/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "lift_pot",
+      "clean": {
+        "success_rate": 1.0,
+        "successes": 100,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/lift_pot/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-10_08-17-36_018745/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "move_can_pot",
+      "clean": {
+        "success_rate": 0.58,
+        "successes": 58,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/move_can_pot/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-10_13-28-44_951227/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "move_pillbottle_pad",
+      "clean": {
+        "success_rate": 0.41,
+        "successes": 41,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/move_pillbottle_pad/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-10_09-17-40_740753/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "move_playingcard_away",
+      "clean": {
+        "success_rate": 0.85,
+        "successes": 85,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/move_playingcard_away/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-10_15-19-25_436293/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "move_stapler_pad",
+      "clean": {
+        "success_rate": 0.3,
+        "successes": 30,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/move_stapler_pad/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-10_11-16-15_910123/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "open_laptop",
+      "clean": {
+        "success_rate": 0.97,
+        "successes": 97,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/open_laptop/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-10_16-11-58_092648/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "open_microwave",
+      "clean": {
+        "success_rate": 0.91,
+        "successes": 91,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/open_microwave/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-10_12-58-47_487163/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "pick_diverse_bottles",
+      "clean": {
+        "success_rate": 0.63,
+        "successes": 63,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/pick_diverse_bottles/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-10_17-16-56_301849/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "pick_dual_bottles",
+      "clean": {
+        "success_rate": 0.76,
+        "successes": 76,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/pick_dual_bottles/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-10_16-11-21_840530/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "place_a2b_left",
+      "clean": {
+        "success_rate": 0.72,
+        "successes": 72,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/place_a2b_left/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-10_18-55-07_342405/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "place_a2b_right",
+      "clean": {
+        "success_rate": 0.68,
+        "successes": 68,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/place_a2b_right/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-10_17-36-12_728650/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "place_bread_basket",
+      "clean": {
+        "success_rate": 0.66,
+        "successes": 66,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/place_bread_basket/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-10_20-12-14_611858/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "place_bread_skillet",
+      "clean": {
+        "success_rate": 0.72,
+        "successes": 72,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/place_bread_skillet/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-10_18-54-00_968442/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "place_burger_fries",
+      "clean": {
+        "success_rate": 0.79,
+        "successes": 79,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/place_burger_fries/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-10_22-19-21_021449/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "place_can_basket",
+      "clean": {
+        "success_rate": 0.58,
+        "successes": 58,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/place_can_basket/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-10_20-35-29_458756/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "place_cans_plasticbox",
+      "clean": {
+        "success_rate": 0.38,
+        "successes": 38,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/place_cans_plasticbox/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-11_00-13-44_433400/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "place_container_plate",
+      "clean": {
+        "success_rate": 0.94,
+        "successes": 94,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/place_container_plate/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-10_23-50-29_663065/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "place_dual_shoes",
+      "clean": {
+        "success_rate": 0.56,
+        "successes": 56,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/place_dual_shoes/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-11_04-19-13_414862/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "place_empty_cup",
+      "clean": {
+        "success_rate": 0.95,
+        "successes": 95,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/place_empty_cup/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-11_00-46-22_173426/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "place_fan",
+      "clean": {
+        "success_rate": 0.67,
+        "successes": 67,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/place_fan/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-11_06-54-58_184532/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "place_mouse_pad",
+      "clean": {
+        "success_rate": 0.31,
+        "successes": 31,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/place_mouse_pad/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-11_01-50-26_028374/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "place_object_basket",
+      "clean": {
+        "success_rate": 0.71,
+        "successes": 71,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/place_object_basket/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-11_08-17-01_392463/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "place_object_scale",
+      "clean": {
+        "success_rate": 0.7,
+        "successes": 70,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/place_object_scale/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-11_03-25-15_560679/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "place_object_stand",
+      "clean": {
+        "success_rate": 0.87,
+        "successes": 87,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/place_object_stand/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-11_10-52-53_202750/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "place_phone_stand",
+      "clean": {
+        "success_rate": 0.58,
+        "successes": 58,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/place_phone_stand/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-11_04-42-57_186034/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "place_shoe",
+      "clean": {
+        "success_rate": 0.79,
+        "successes": 79,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/place_shoe/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-11_11-51-24_625080/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "press_stapler",
+      "clean": {
+        "success_rate": 0.83,
+        "successes": 83,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/press_stapler/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-11_06-04-12_597506/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "put_bottles_dustbin",
+      "clean": {
+        "success_rate": 0.79,
+        "successes": 79,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/put_bottles_dustbin/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-11_13-09-08_351882/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "put_object_cabinet",
+      "clean": {
+        "success_rate": 0.3,
+        "successes": 30,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/put_object_cabinet/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-11_06-58-09_503440/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "rotate_qrcode",
+      "clean": {
+        "success_rate": 0.89,
+        "successes": 89,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/rotate_qrcode/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-11_18-23-17_913492/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "scan_object",
+      "clean": {
+        "success_rate": 0.47,
+        "successes": 47,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/scan_object/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-11_10-56-58_807688/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "shake_bottle",
+      "clean": {
+        "success_rate": 1.0,
+        "successes": 100,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/shake_bottle/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-11_19-32-10_752880/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "shake_bottle_horizontally",
+      "clean": {
+        "success_rate": 0.99,
+        "successes": 99,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/shake_bottle_horizontally/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-11_13-21-30_563352/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "stack_blocks_three",
+      "clean": {
+        "success_rate": 0.61,
+        "successes": 61,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/stack_blocks_three/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-11_20-17-03_721517/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "stack_blocks_two",
+      "clean": {
+        "success_rate": 0.92,
+        "successes": 92,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/stack_blocks_two/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-11_14-13-15_094342/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "stack_bowls_three",
+      "clean": {
+        "success_rate": 0.75,
+        "successes": 75,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/stack_bowls_three/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-11_23-36-04_634472/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "stack_bowls_two",
+      "clean": {
+        "success_rate": 0.93,
+        "successes": 93,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/stack_bowls_two/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-11_16-04-37_221217/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "stamp_seal",
+      "clean": {
+        "success_rate": 0.43,
+        "successes": 43,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/stamp_seal/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-12_03-04-21_711753/_result.txt"
+      },
+      "randomized": null
+    },
+    {
+      "task": "turn_switch",
+      "clean": {
+        "success_rate": 0.51,
+        "successes": 51,
+        "episodes": 100,
+        "expected": 100,
+        "source": "eval_result/turn_switch/Pi_05/demo_clean/robotwin-pi05-29999/2026-10-11_18-13-57_180530/_result.txt"
+      },
+      "randomized": null
+    }
+  ],
+  "robodojo": [
+    {
+      "task": "align_blocks",
+      "standard": {
+        "success_rate": 0.0,
+        "score": 0.0,
+        "episodes": 50,
+        "expected": 50,
+        "successes": 0,
+        "source": "eval_result/RoboDojo/align_blocks/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": null,
+      "has_randomized": false
+    },
+    {
+      "task": "arrange_largest_number",
+      "standard": {
+        "success_rate": 0.0,
+        "score": 5.600000000000001,
+        "episodes": 25,
+        "expected": 25,
+        "successes": 0,
+        "source": "eval_result/RoboDojo/arrange_largest_number/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": {
+        "success_rate": 0.0,
+        "score": 1.0,
+        "episodes": 25,
+        "expected": 25,
+        "successes": 0,
+        "source": "eval_result/RoboDojo/arrange_largest_number_random/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "has_randomized": true
+    },
+    {
+      "task": "build_tower",
+      "standard": {
+        "success_rate": 0.42,
+        "score": 49.200000000000045,
+        "episodes": 50,
+        "expected": 50,
+        "successes": 21,
+        "source": "eval_result/RoboDojo/build_tower/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": null,
+      "has_randomized": false
+    },
+    {
+      "task": "classify_objects",
+      "standard": {
+        "success_rate": 0.2,
+        "score": 32.20000000000001,
+        "episodes": 50,
+        "expected": 50,
+        "successes": 10,
+        "source": "eval_result/RoboDojo/classify_objects/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": null,
+      "has_randomized": false
+    },
+    {
+      "task": "classify_objects_by_language",
+      "standard": {
+        "success_rate": 0.0,
+        "score": 0.8,
+        "episodes": 50,
+        "expected": 50,
+        "successes": 0,
+        "source": "eval_result/RoboDojo/classify_objects_by_language/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": null,
+      "has_randomized": false
+    },
+    {
+      "task": "cover_blocks",
+      "standard": {
+        "success_rate": 0.08,
+        "score": 15.899999999999991,
+        "episodes": 50,
+        "expected": 50,
+        "successes": 4,
+        "source": "eval_result/RoboDojo/cover_blocks/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": null,
+      "has_randomized": false
+    },
+    {
+      "task": "deposit_coin",
+      "standard": {
+        "success_rate": 0.0,
+        "score": 3.9999999999999996,
+        "episodes": 50,
+        "expected": 50,
+        "successes": 0,
+        "source": "eval_result/RoboDojo/deposit_coin/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": null,
+      "has_randomized": false
+    },
+    {
+      "task": "fasten_screws",
+      "standard": {
+        "success_rate": 0.02,
+        "score": 11.8,
+        "episodes": 50,
+        "expected": 50,
+        "successes": 1,
+        "source": "eval_result/RoboDojo/fasten_screws/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": null,
+      "has_randomized": false
+    },
+    {
+      "task": "fill_egg_holder",
+      "standard": {
+        "success_rate": 0.0,
+        "score": 2.6,
+        "episodes": 50,
+        "expected": 50,
+        "successes": 0,
+        "source": "eval_result/RoboDojo/fill_egg_holder/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": null,
+      "has_randomized": false
+    },
+    {
+      "task": "fill_pen_holder",
+      "standard": {
+        "success_rate": 0.1,
+        "score": 28.700000000000003,
+        "episodes": 50,
+        "expected": 50,
+        "successes": 5,
+        "source": "eval_result/RoboDojo/fill_pen_holder/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": null,
+      "has_randomized": false
+    },
+    {
+      "task": "fold_clothes",
+      "standard": {
+        "success_rate": 0.44,
+        "score": 52.0,
+        "episodes": 25,
+        "expected": 25,
+        "successes": 11,
+        "source": "eval_result/RoboDojo/fold_clothes/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": {
+        "success_rate": 0.12,
+        "score": 23.200000000000003,
+        "episodes": 25,
+        "expected": 25,
+        "successes": 3,
+        "source": "eval_result/RoboDojo/fold_clothes_random/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "has_randomized": true
+    },
+    {
+      "task": "general_pickup",
+      "standard": {
+        "success_rate": 0.16,
+        "score": 16.0,
+        "episodes": 50,
+        "expected": 50,
+        "successes": 8,
+        "source": "eval_result/RoboDojo/general_pickup/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": null,
+      "has_randomized": false
+    },
+    {
+      "task": "hang_mugs",
+      "standard": {
+        "success_rate": 0.0,
+        "score": 7.799999999999999,
+        "episodes": 25,
+        "expected": 25,
+        "successes": 0,
+        "source": "eval_result/RoboDojo/hang_mugs/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": {
+        "success_rate": 0.0,
+        "score": 5.999999999999999,
+        "episodes": 25,
+        "expected": 25,
+        "successes": 0,
+        "source": "eval_result/RoboDojo/hang_mugs_random/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "has_randomized": true
+    },
+    {
+      "task": "imitate_sorting_sequence",
+      "standard": {
+        "success_rate": 0.0,
+        "score": 1.4000000000000001,
+        "episodes": 50,
+        "expected": 50,
+        "successes": 0,
+        "source": "eval_result/RoboDojo/imitate_sorting_sequence/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": null,
+      "has_randomized": false
+    },
+    {
+      "task": "insert_key",
+      "standard": {
+        "success_rate": 0.0,
+        "score": 12.000000000000007,
+        "episodes": 50,
+        "expected": 50,
+        "successes": 0,
+        "source": "eval_result/RoboDojo/insert_key/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": null,
+      "has_randomized": false
+    },
+    {
+      "task": "insert_tubes",
+      "standard": {
+        "success_rate": 0.2,
+        "score": 39.59999999999999,
+        "episodes": 50,
+        "expected": 50,
+        "successes": 10,
+        "source": "eval_result/RoboDojo/insert_tubes/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": null,
+      "has_randomized": false
+    },
+    {
+      "task": "make_kong",
+      "standard": {
+        "success_rate": 0.28,
+        "score": 28.000000000000004,
+        "episodes": 50,
+        "expected": 50,
+        "successes": 14,
+        "source": "eval_result/RoboDojo/make_kong/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": null,
+      "has_randomized": false
+    },
+    {
+      "task": "make_toast",
+      "standard": {
+        "success_rate": 0.04,
+        "score": 14.000000000000002,
+        "episodes": 25,
+        "expected": 25,
+        "successes": 1,
+        "source": "eval_result/RoboDojo/make_toast/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": {
+        "success_rate": 0.0,
+        "score": 7.000000000000001,
+        "episodes": 25,
+        "expected": 25,
+        "successes": 0,
+        "source": "eval_result/RoboDojo/make_toast_random/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "has_randomized": true
+    },
+    {
+      "task": "match_and_pick_from_conveyor",
+      "standard": {
+        "success_rate": 0.18,
+        "score": 18.0,
+        "episodes": 50,
+        "expected": 50,
+        "successes": 9,
+        "source": "eval_result/RoboDojo/match_and_pick_from_conveyor/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": null,
+      "has_randomized": false
+    },
+    {
+      "task": "organize_table",
+      "standard": {
+        "success_rate": 0.02,
+        "score": 26.0,
+        "episodes": 50,
+        "expected": 50,
+        "successes": 1,
+        "source": "eval_result/RoboDojo/organize_table/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": null,
+      "has_randomized": false
+    },
+    {
+      "task": "pack_objects_into_box",
+      "standard": {
+        "success_rate": 0.0,
+        "score": 22.4,
+        "episodes": 25,
+        "expected": 25,
+        "successes": 0,
+        "source": "eval_result/RoboDojo/pack_objects_into_box/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": {
+        "success_rate": 0.0,
+        "score": 18.599999999999994,
+        "episodes": 25,
+        "expected": 25,
+        "successes": 0,
+        "source": "eval_result/RoboDojo/pack_objects_into_box_random/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "has_randomized": true
+    },
+    {
+      "task": "pick_from_conveyor_by_image",
+      "standard": {
+        "success_rate": 0.0,
+        "score": 0.0,
+        "episodes": 50,
+        "expected": 50,
+        "successes": 0,
+        "source": "eval_result/RoboDojo/pick_from_conveyor_by_image/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": null,
+      "has_randomized": false
+    },
+    {
+      "task": "play_Xylophone",
+      "standard": {
+        "success_rate": 0.0,
+        "score": 0.0,
+        "episodes": 50,
+        "expected": 50,
+        "successes": 0,
+        "source": "eval_result/RoboDojo/play_Xylophone/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": null,
+      "has_randomized": false
+    },
+    {
+      "task": "play_stacking_toy",
+      "standard": {
+        "success_rate": 0.0,
+        "score": 0.0,
+        "episodes": 50,
+        "expected": 50,
+        "successes": 0,
+        "source": "eval_result/RoboDojo/play_stacking_toy/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": null,
+      "has_randomized": false
+    },
+    {
+      "task": "play_tic_tac_toe",
+      "standard": {
+        "success_rate": 0.0,
+        "score": 12.499999999999991,
+        "episodes": 50,
+        "expected": 50,
+        "successes": 0,
+        "source": "eval_result/RoboDojo/play_tic_tac_toe/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": null,
+      "has_randomized": false
+    },
+    {
+      "task": "plug_in_charger",
+      "standard": {
+        "success_rate": 0.0,
+        "score": 0.0,
+        "episodes": 50,
+        "expected": 50,
+        "successes": 0,
+        "source": "eval_result/RoboDojo/plug_in_charger/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": null,
+      "has_randomized": false
+    },
+    {
+      "task": "pour_balls_into_vase",
+      "standard": {
+        "success_rate": 0.16,
+        "score": 16.0,
+        "episodes": 50,
+        "expected": 50,
+        "successes": 8,
+        "source": "eval_result/RoboDojo/pour_balls_into_vase/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": null,
+      "has_randomized": false
+    },
+    {
+      "task": "pour_by_language",
+      "standard": {
+        "success_rate": 0.0,
+        "score": 0.0,
+        "episodes": 50,
+        "expected": 50,
+        "successes": 0,
+        "source": "eval_result/RoboDojo/pour_by_language/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": null,
+      "has_randomized": false
+    },
+    {
+      "task": "pour_liquid_into_cup",
+      "standard": {
+        "success_rate": 0.44,
+        "score": 44.0,
+        "episodes": 25,
+        "expected": 25,
+        "successes": 11,
+        "source": "eval_result/RoboDojo/pour_liquid_into_cup/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": {
+        "success_rate": 0.08,
+        "score": 8.0,
+        "episodes": 25,
+        "expected": 25,
+        "successes": 2,
+        "source": "eval_result/RoboDojo/pour_liquid_into_cup_random/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "has_randomized": true
+    },
+    {
+      "task": "press_by_number",
+      "standard": {
+        "success_rate": 0.02,
+        "score": 2.0,
+        "episodes": 50,
+        "expected": 50,
+        "successes": 1,
+        "source": "eval_result/RoboDojo/press_by_number/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": null,
+      "has_randomized": false
+    },
+    {
+      "task": "push_T",
+      "standard": {
+        "success_rate": 0.0,
+        "score": 0.0,
+        "episodes": 25,
+        "expected": 25,
+        "successes": 0,
+        "source": "eval_result/RoboDojo/push_T/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": {
+        "success_rate": 0.0,
+        "score": 0.0,
+        "episodes": 25,
+        "expected": 25,
+        "successes": 0,
+        "source": "eval_result/RoboDojo/push_T_random/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "has_randomized": true
+    },
+    {
+      "task": "put_bottles_into_dustbin",
+      "standard": {
+        "success_rate": 0.84,
+        "score": 90.39999999999999,
+        "episodes": 50,
+        "expected": 50,
+        "successes": 42,
+        "source": "eval_result/RoboDojo/put_bottles_into_dustbin/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": null,
+      "has_randomized": false
+    },
+    {
+      "task": "solve_equation",
+      "standard": {
+        "success_rate": 0.0,
+        "score": 0.0,
+        "episodes": 50,
+        "expected": 50,
+        "successes": 0,
+        "source": "eval_result/RoboDojo/solve_equation/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": null,
+      "has_randomized": false
+    },
+    {
+      "task": "sort_nesting_dolls_by_size",
+      "standard": {
+        "success_rate": 0.16,
+        "score": 16.0,
+        "episodes": 25,
+        "expected": 25,
+        "successes": 4,
+        "source": "eval_result/RoboDojo/sort_nesting_dolls_by_size/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": {
+        "success_rate": 0.0,
+        "score": 0.0,
+        "episodes": 25,
+        "expected": 25,
+        "successes": 0,
+        "source": "eval_result/RoboDojo/sort_nesting_dolls_by_size_random/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "has_randomized": true
+    },
+    {
+      "task": "stack_blocks",
+      "standard": null,
+      "randomized": null,
+      "has_randomized": true
+    },
+    {
+      "task": "stack_blocks_by_language",
+      "standard": null,
+      "randomized": null,
+      "has_randomized": false
+    },
+    {
+      "task": "stack_bowls",
+      "standard": {
+        "success_rate": 0.68,
+        "score": 72.2,
+        "episodes": 25,
+        "expected": 25,
+        "successes": 17,
+        "source": "eval_result/RoboDojo/stack_bowls/Pi_05/arx_x5/0_full-20261009-220451/20261009-220451/_result.json"
+      },
+      "randomized": null,
+      "has_randomized": true
+    },
+    {
+      "task": "store_laptop_and_headphones",
+      "standard": null,
+      "randomized": null,
+      "has_randomized": true
+    },
+    {
+      "task": "store_tools_in_toolbox",
+      "standard": null,
+      "randomized": null,
+      "has_randomized": false
+    },
+    {
+      "task": "swap_T",
+      "standard": null,
+      "randomized": null,
+      "has_randomized": false
+    },
+    {
+      "task": "swap_blocks",
+      "standard": null,
+      "randomized": null,
+      "has_randomized": false
+    },
+    {
+      "task": "sweep_blocks",
+      "standard": null,
+      "randomized": null,
+      "has_randomized": true
+    }
+  ],
+  "dojo_completed": 43,
+  "dojo_total": 54
+}

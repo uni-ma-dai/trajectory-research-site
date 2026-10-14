@@ -111,3 +111,6 @@ pre { font-family: var(--code-font); font-size: 15px; }
 @media(max-width:750px){.page-directory nav{grid-template-columns:repeat(2,1fr)}.page-title{font-size:30px}}
 
 .page-scope{margin-top:-14px;font-size:22px}.execution-settings{background:#edf2e7;padding:24px;border-radius:16px;margin-top:24px}.fold-diagnostics{margin:28px 0}.fold-diagnostics h4{font-size:24px;margin:24px 0 12px}.diagnostic-scroll{overflow-x:auto}.fold-diagnostics table{width:100%;border-collapse:collapse;font-size:20px}.fold-diagnostics th,.fold-diagnostics td{padding:10px 12px;border-bottom:1px solid #dce3d8;text-align:center;white-space:nowrap}.fold-diagnostics th{background:#edf2e7}.fold-diagnostics td:last-child{white-space:normal;text-align:left;min-width:260px}.check-pass{color:#387047;font-weight:bold}.check-fail{color:#93634d;font-weight:bold}
+.page-directory nav{grid-template-columns:repeat(5,auto)}
+@media(max-width:900px){.page-directory nav{grid-template-columns:repeat(2,1fr)}}
+.expert-result{border-top:1px solid #dce3d8;margin-top:40px;padding:28px 0}.expert-result video{display:block;width:min(100%,800px);margin:20px auto;background:#e9ede8}.expert-result table{width:100%;border-collapse:collapse;font-size:21px}.expert-result th,.expert-result td{padding:12px;border-bottom:1px solid #dce3d8;text-align:left}.expert-result th{background:#edf1e9}

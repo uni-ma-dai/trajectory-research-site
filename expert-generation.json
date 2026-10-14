@@ -1,0 +1,22 @@
+{
+  "task": "stack_blocks_two",
+  "config": "demo_clean",
+  "embodiment": "aloha-agilex",
+  "save_freq": 5,
+  "status": "completed",
+  "seeds": [
+    0
+  ],
+  "success_checks": [
+    true,
+    true
+  ],
+  "elapsed_seconds": 115.87,
+  "video_frames": 847,
+  "state_action_pairs": 846,
+  "video_fps": 30,
+  "video_seconds": 28.234,
+  "source_commit": "c234d95",
+  "generator": "scripts/collect_data.py",
+  "source_state": "isolated committed RoboTwin source; working edits excluded"
+}

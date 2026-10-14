@@ -70,3 +70,6 @@ $('close-dialog').addEventListener('click',()=>$('source-dialog').close());$('so
 $('copy-path').addEventListener('click',async()=>{if(!activeSource)return;const path=`${activeSource.file}:${activeSource.line}`;try{await navigator.clipboard.writeText(path);$('copy-status').textContent='已复制';}catch{$('copy-status').textContent='请选中上方路径复制';}});
 Object.assign(sources, window.SOURCE_REFERENCES || {});
 renderFlow();renderLayers();
+
+const expertVideo=document.getElementById('expert-video');
+if(expertVideo){document.getElementById('expert-play').onclick=async()=>{try{await expertVideo.play();}catch(error){if(error.name!=='AbortError')document.getElementById('expert-play').textContent='重新播放';}};document.getElementById('expert-stop').onclick=()=>{expertVideo.pause();expertVideo.currentTime=0;};}
