@@ -40,7 +40,7 @@ let activeSource = null;
 const $ = id => document.getElementById(id);
 function el(tag, className, text) { const n = document.createElement(tag); if(className)n.className=className; if(text!==undefined)n.textContent=text; return n; }
 function codeButton(id) {
-  const s=sources[id]; const btn=el('button','code-button'); btn.type='button';
+  const s=sources[id]; const btn=el('button','code-button'); btn.type='button'; btn.dataset.sourceRef=id;
   const label=el('span'); label.append(el('code','',s?.symbol || id),el('small','',s?.file || '加载代码入口…')); btn.append(label,el('span','arrow','↗')); btn.addEventListener('click',()=>showSource(id)); return btn;
 }
 function renderFlow() {
