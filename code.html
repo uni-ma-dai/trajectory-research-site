@@ -1,1601 +1,261 @@
-<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>代码阅读摘录</title><link rel="stylesheet" href="style.css"><style>main{max-width:1100px;margin:auto;padding:32px}section{padding:24px 0;border-bottom:1px solid #ddd}pre{overflow:auto;font-family:Consolas,monospace;font-size:15px}section:target{background:#edf2eb}</style><main><a href="index.html">返回整体流程</a><h1>代码阅读摘录</h1><p>发布时的阅读快照，仅包含页面使用的摘录；不包含完整研究仓库。</p><section id="dojoReset"><h2>reset()</h2><p>RoboDojo/src/eval_client/eval_env.py:208</p><pre><code> 208          def reset(self, seed=None, options=None):
- 209              seed = list(seed)
- 210              if len(seed) &lt; self.num_envs:
- 211                  seed = seed + [None] * (self.num_envs - len(seed))
- 212  
- 213              real_indices = [i for i, s in enumerate(seed) if s is not None]
- 214              safe_seed = seed[real_indices[0]] if real_indices else 0
- 215              # Fill None positions with safe_seed so scene_manager can still load
- 216              self.env_seeds = [s if s is not None else safe_seed for s in seed]
- 217  
- 218              self.success = [True] * self.num_envs
- 219              self.end_flag = [False] * self.num_envs
- 220              self.take_action_cnt = [0] * self.num_envs
- 221              # Discard any writers left open by a previous (e.g. crashed or
- 222              # unstable) batch before starting a fresh one.
- 223              self._abort_video_writers()
- 224              self.episode_nums = len(real_indices)
- 225              self.unstable_envs = set()
- 226  
- 227              self.current_env_seed_map = {}
- 228              for idx in range(self.num_envs):
- 229                  self.scene_manager.layout_manager.set_saved_layout(
- 230                      idx, self.seed_manager.get_seed_scene_info(self.env_seeds[idx])
- 231                  )
- 232                  if seed[idx] is None:
- 233                      self.success[idx] = False
- 234                      self.end_flag[idx] = True
- 235                  else:
- 236                      self.current_env_seed_map[idx] = seed[idx]
- 237  
- 238              super().reset(seed=self.env_seeds, options=options)
- 239              self.obs_manager.reset()  # Reset observation manager for the next episode
- 240              self.setup_scene()
- 241              self.robot_manager.set_origin_endpose()
- 242              self.robot_manager.set_robot_init_state()
- 243              self.reward_manager.init_state()
- 244  
- 245              self.model_client.call(func_name=&quot;reset&quot;)</code></pre></section><section id="dojoSetup"><h2>setup_scene()</h2><p>RoboDojo/src/eval_client/eval_env.py:247</p><pre><code> 247          def setup_scene(self):
- 248              self.scene_manager.apply_saved_poses(env_idx_list=list(range(self.num_envs)))
- 249              self._align_layout_success()
- 250              success, unstable_envs = self.scene_manager.layout_manager.check_layout_stability(self)
- 251              unstable_envs = [idx for idx in set(unstable_envs) if idx &lt; self.num_envs]
- 252              self.unstable_nums += len(unstable_envs)
- 253              self.episode_nums -= len(unstable_envs)
- 254              if not success or self.episode_nums &lt;= 0:
- 255                  raise UnStableError(&quot;All scene Unstable Error!&quot;)
- 256              for _ in range(10):
- 257                  self.render()
- 258              for idx in range(200):
- 259                  self.sim_step()
- 260                  if idx % 5 == 0:
- 261                      self.obs_manager.render_for_capture()
- 262                      self.obs_manager.get_obs()
- 263              if self.physx_monitor_enabled:
- 264                  self._check_physx_broken_envs()</code></pre></section><section id="loadLayout"><h2>load_saved_layout()</h2><p>RoboDojo/env/scene_manager/layout_manager.py:151</p><pre><code> 151      def load_saved_layout(self, env_idx):
- 152          self._set_env_seed(env_idx)
- 153          env_config = deepcopy(self.saved_layouts[env_idx])
- 154          if env_config is None:
- 155              return None
- 156          self.clear_layout_state([env_idx])
- 157          for key, value in env_config.items():
- 158              if key in [&quot;Rigid&quot;, &quot;Dynamic&quot;, &quot;Geometry&quot;, &quot;Articulation&quot;, &quot;Garment&quot;, &quot;Fluid&quot;]:
- 159                  for cat, inst_list in value.items():
- 160                      for inst in inst_list:
- 161                          cat_idx = inst.get(&quot;category_idx&quot;, None)
- 162                          prim_path, inst_name = self._generate_object_paths(env_idx, cat, cat_idx, type=key.lower())
- 163                          if key in [&quot;Rigid&quot;, &quot;Dynamic&quot;, &quot;Garment&quot;, &quot;Articulation&quot;, &quot;Geometry&quot;, &quot;Fluid&quot;]:
- 164                              if &quot;type&quot; in inst and inst[&quot;type&quot;] == &quot;cluttered&quot;:
- 165                                  usd_path = f&quot;{OBJECTS_PATH}/Clutter/{cat}/{cat_idx:05d}/object.usdz&quot;
- 166                              else:
- 167                                  usd_path = f&quot;{OBJECTS_PATH}/{key}/{cat}/{cat_idx:05d}/object.usdz&quot;
- 168                              if not os.path.exists(usd_path):
- 169                                  usd_path = f&quot;{OBJECTS_PATH}/{key}/{cat}/{cat_idx:05d}/object.usd&quot;
- 170                          if &quot;visual&quot; in inst:
- 171                              visual_cfg = inst.get(&quot;visual&quot;)
- 172                              if isinstance(visual_cfg, DictConfig):
- 173                                  visual_cfg = OmegaConf.to_container(visual_cfg, resolve=True)
- 174                              if isinstance(visual_cfg, dict):
- 175                                  visual_usd_path = visual_cfg.get(&quot;visual_usd_path&quot;, None)
- 176                                  if isinstance(visual_usd_path, str) and &quot;$&quot; in visual_usd_path:
- 177                                      visual_cfg[&quot;visual_usd_path&quot;] = resolve_path(visual_usd_path)
- 178                                  visual_mdl_path = visual_cfg.get(&quot;visual_mdl_path&quot;, None)
- 179                                  if isinstance(visual_mdl_path, str) and &quot;$&quot; in visual_mdl_path:
- 180                                      visual_cfg[&quot;visual_mdl_path&quot;] = resolve_path(visual_mdl_path)
- 181                                  inst[&quot;visual&quot;] = visual_cfg
- 182                          inst[&quot;prim_path&quot;] = prim_path
- 183                          inst[&quot;usd_path&quot;] = usd_path
- 184                          inst[&quot;inst_name&quot;] = inst_name
- 185                          if &quot;type&quot; in inst and inst[&quot;type&quot;] == &quot;cluttered&quot;:
- 186                              modeldir = f&quot;{OBJECTS_PATH}/Clutter/{cat}&quot;
- 187                          else:
- 188                              modeldir = f&quot;{OBJECTS_PATH}/{key}/{cat}&quot;
- 189                          data = load_object_metadata(modeldir, cat_idx)
- 190                          data[&quot;model_name&quot;] = cat
- 191                          data[&quot;model_id&quot;] = cat_idx
- 192                          info = load_desc_info(modeldir, cat_idx, key)
- 193                          if info is not None:
- 194                              data.update(info)
- 195                          self.object_records_by_type[key].add_instance(env_idx, inst, data)
- 196                          self.instance_type_by_env[env_idx][inst_name] = key.lower()
- 197              elif key == &quot;Room&quot;:
- 198                  value = self.select_room(env_idx, room_cfg=value)
- 199              elif key == &quot;Table&quot;:
- 200                  value = self.select_table(env_idx, table_cfg=value)
-      … 完整函数请查看源码</code></pre></section><section id="savedPoses"><h2>apply_saved_poses()</h2><p>RoboDojo/env/scene_manager/scene_manager.py:194</p><pre><code> 194      def apply_saved_poses(self, env_idx_list: List[int]):
- 195          &quot;&quot;&quot;Restore all scene objects to their saved eval-layout poses.
- 196  
- 197          Tables are applied first so support surfaces are in place, then rigid,
- 198          articulation, garment, geometry, and fluid objects. Each phase is
- 199          followed by unrendered physics steps so bodies can settle before the
- 200          next group is placed.
- 201          &quot;&quot;&quot;
- 202          for env_idx in env_idx_list:
- 203              if self._tables[env_idx] is not None:
- 204                  self._tables[env_idx].apply_saved_pose()
- 205  
- 206          for _ in range(20):  # waiting for tables to settle down
- 207              self.sim.sim_step(render=False)
- 208  
- 209          for env_idx in env_idx_list:
- 210              for obj_dict in [
- 211                  self._rigid_and_dynamic_objects[env_idx],
- 212                  self._articulation_objects[env_idx],
- 213                  self._garment_objects[env_idx],
- 214                  self._geometry_objects[env_idx],
- 215                  self._fluid_objects[env_idx],
- 216              ]:
- 217                  for obj in obj_dict.values():
- 218                      obj.apply_saved_pose()
- 219  
- 220          for _ in range(20):
- 221              self.sim.sim_step(render=False)</code></pre></section><section id="dojoTrial"><h2>main()</h2><p>RoboDojo/src/eval_client/main.py:254</p><pre><code> 254  def main():
- 255      &quot;&quot;&quot;Assemble the env config, build the eval env, and run the eval loop with
- 256      PhysX crash/resume recovery until the requested episode count is reached.
- 257      &quot;&quot;&quot;
- 258      task_name = args_cli.task_name
- 259      num_envs = args_cli.num_envs
- 260      eval_cfg_name = args_cli.env_cfg_type
- 261      eval_cfg = load_yaml(os.path.join(ENV_CONFIG_PATH, eval_cfg_name + &quot;.yml&quot;))
- 262      eval_cfg[&quot;task_name&quot;] = task_name
- 263      eval_cfg[&quot;num_envs&quot;] = num_envs
- 264      eval_cfg[&quot;device_id&quot;] = args_cli.device_id
- 265      eval_batch = _eval_batch_from_deploy(args_cli.policy_name)
- 266      eval_cfg[&quot;eval_batch&quot;] = eval_batch
- 267      eval_cfg[&quot;policy_name&quot;] = args_cli.policy_name
- 268      eval_cfg[&quot;additional_info&quot;] = args_cli.additional_info
- 269      eval_cfg[&quot;seed&quot;] = args_cli.seed
- 270      eval_cfg[&quot;physx_monitor_enabled&quot;] = enable_monitor
- 271  
- 272      deploy_cfg = {}
- 273      deploy_cfg[&quot;policy_name&quot;] = args_cli.policy_name
- 274      deploy_cfg[&quot;port&quot;] = args_cli.port
- 275      deploy_cfg[&quot;host&quot;] = args_cli.host
- 276      deploy_cfg[&quot;protocol&quot;] = args_cli.protocol
- 277      deploy_cfg[&quot;policy_server_url&quot;] = args_cli.policy_server_url or f&quot;ws://{args_cli.host}:{args_cli.port}&quot;
- 278      deploy_cfg[&quot;evaluation_id&quot;] = os.environ[&quot;ROBODOJO_RUN_ID&quot;]
- 279      deploy_cfg[&quot;trial_id&quot;] = f&quot;{task_name}-{os.environ[&#x27;ROBODOJO_RUN_ID&#x27;]}&quot;
- 280      deploy_cfg[&quot;action_case_id&quot;] = f&quot;{task_name}_case&quot;
- 281      deploy_cfg[&quot;repeat_index&quot;] = None
- 282      env_cfg = OmegaConf.create(
- 283          {
- 284              &quot;sim&quot;: load_yaml(os.path.join(ENV_CONFIG_PATH, &quot;sim&quot;, eval_cfg[&quot;config&quot;][&quot;sim&quot;] + &quot;.yml&quot;)),
- 285              &quot;scene&quot;: load_yaml(
- 286                  os.path.join(
- 287                      ENV_CONFIG_PATH,
- 288                      &quot;scene&quot;,
- 289                      eval_cfg[&quot;config&quot;][&quot;scene&quot;] + &quot;.yml&quot;,
- 290                  )
- 291              ),
- 292              &quot;camera&quot;: load_yaml(
- 293                  os.path.join(
- 294                      ENV_CONFIG_PATH,
- 295                      &quot;camera&quot;,
- 296                      eval_cfg[&quot;config&quot;][&quot;camera&quot;] + &quot;.yml&quot;,
- 297                  )
- 298              ),
- 299              &quot;robot&quot;: load_yaml(
- 300                  os.path.join(
- 301                      ENV_CONFIG_PATH,
- 302                      &quot;robot&quot;,
- 303                      eval_cfg[&quot;config&quot;][&quot;robot&quot;] + &quot;.yml&quot;,
-      … 完整函数请查看源码</code></pre></section><section id="dojoObsInit"><h2>__init__()</h2><p>RoboDojo/env/observation_manager/obs_manager.py:16</p><pre><code>  16      def __init__(
-  17          self,
-  18          obs_config,
-  19          num_envs,
-  20          dt,
-  21          task_name,
-  22          description_cfg,
-  23          seeds_per_env: List[int] = None,
-  24      ):
-  25          self.obs_config = obs_config
-  26          self.num_envs = num_envs
-  27          self.dt = dt
-  28          self.task_name = task_name
-  29          self.description_cfg = description_cfg
-  30          self.desc_manager = DescManager(
-  31              num_envs=self.num_envs,
-  32              description_cfg=self.description_cfg,
-  33              desc_type=&quot;seen&quot;,
-  34              seeds_per_env=seeds_per_env,
-  35          )
-  36          self.robot_cfg = obs_config.get(&quot;robot&quot;, {})
-  37          self.collect_freq = self.obs_config.get(&quot;collect_freq&quot;, 0)
-  38          # Frames the SDG dispatcher must deliver after the physics step before
-  39          # images are read. One is exact with the zero-delay Kit settings that
-  40          # the entrypoints enable; render_sync adds one more if they are absent.
-  41          self.capture_render_passes = int(self.obs_config.get(&quot;capture_render_passes&quot;, 1))
-  42          self.capture_render_max_passes = int(self.obs_config.get(&quot;capture_render_max_passes&quot;, 16))
-  43          if self.collect_freq &gt; 0:
-  44              self.collect_interval = 1.0 / (self.dt * self.collect_freq)
-  45          else:
-  46              self.collect_interval = 0.0
-  47          if not self.collect_interval.is_integer():
-  48              raise ValueError(&quot;Collect Interval must be integer!&quot;)
-  49          vision_cfg = self.obs_config.get(&quot;vision&quot;, {})
-  50          self.collect_approximate_depth = vision_cfg.get(&quot;approximate_depth&quot;, True)
-  51          self.collect_depth = vision_cfg.get(&quot;depth&quot;, False)
-  52          self.collect_intrinsic_matrix = vision_cfg.get(&quot;intrinsic_matrix&quot;, False)
-  53          self.collect_extrinsic_matrix = vision_cfg.get(&quot;extrinsic_matrix&quot;, False)
-  54          self.collect_shape = vision_cfg.get(&quot;shape&quot;, True)</code></pre></section><section id="dojoControl"><h2>process_control_info()</h2><p>RoboDojo/src/eval_client/eval_env.py:475</p><pre><code> 475          def process_control_info(self, control_info, env_idx):
- 476              &quot;&quot;&quot;Expand one-step `control_info` into a per-step control sequence.
- 477  
- 478              This method returns a list with `interpolation_nums` control dicts
- 479              (deep copies of the input), then overwrites arm/gripper positions
- 480              frame by frame:
- 481  
- 482              - First 80% (floor) steps: linear interpolation from current state
- 483                  to target state.
- 484              - Last 20% steps: hold the target state.
- 485  
- 486              Notes:
- 487              - Arm joints are interpolated in joint space.
- 488              - For grippers, interpolation is done on the primary scalar opening,
- 489                  then mapped to mimic joints.
- 490              - Gripper values are clamped to `robot.gripper_scale` to avoid
- 491                  out-of-range commands.
- 492  
- 493              Args:
- 494                      control_info: One-step target control dict for a single env.
- 495                      env_idx: Environment index used to read current robot states.
- 496  
- 497              Returns:
- 498                      List[dict]: A control sequence of length `interpolation_nums`.
- 499              &quot;&quot;&quot;
- 500              interpolation_nums = int(self.obs_manager.collect_interval)
- 501              if interpolation_nums &lt;= 0:
- 502                  return [deepcopy(control_info)]
- 503  
- 504              control_info_list = [deepcopy(control_info) for _ in range(interpolation_nums)]
- 505              for robot in self.robot_manager.robot_list:
- 506                  if robot.type != &quot;target&quot;:
- 507                      if hasattr(self, &quot;support_arm_action&quot;) and len(self.support_arm_action[env_idx]) &gt; 0:
- 508                          for i in range(interpolation_nums):
- 509                              if len(self.support_arm_action[env_idx]) == 0:
- 510                                  break
- 511                              control_info_list[i].update(self.support_arm_action[env_idx][0])
- 512                              self.support_arm_action[env_idx].pop(0)
- 513  
- 514                  key_name = self.robot_manager.process_name(robot.arm_name)
- 515                  if key_name in control_info.keys():
- 516                      position = control_info[key_name][&quot;position&quot;]
- 517                      current_position = self.robot_manager.get_joint(robot, env_idx_list=[env_idx])[env_idx]
- 518                      if current_position is not None:
- 519                          interp_count = int(np.floor(interpolation_nums * 0.8))
- 520  
- 521                          current_arr = np.array(current_position)
- 522                          target_arr = np.array(position)
- 523  
- 524                          for i in range(interp_count):
-      … 完整函数请查看源码</code></pre></section><section id="dojoBackground"><h2>select_background()</h2><p>RoboDojo/env/scene_manager/layout_manager.py:222</p><pre><code> 222      def select_background(self, background_cfg=None):
- 223          if self.replay:
- 224              for env_idx in range(self.num_envs):
- 225                  if self.saved_layouts[env_idx] is not None and &quot;Background&quot; in self.saved_layouts[env_idx]:
- 226                      self.background = deepcopy(self.saved_layouts[env_idx][&quot;Background&quot;])
- 227                      base_dir = f&quot;{ASSETS_PATH}/Background&quot;
- 228                      category_name = self.background.get(&quot;category_name&quot;, &quot;brown_photostudio_02_16k.hdr&quot;)
- 229                      texture_path = f&quot;{base_dir}/{category_name}&quot;
- 230                      self.background[&quot;texture_path&quot;] = texture_path
- 231                      return self.background
- 232              return None
- 233          if background_cfg is None:
- 234              background_cfg = deepcopy(self.scene_config.Background)
- 235              background_cfg = OmegaConf.to_container(background_cfg, resolve=True)
- 236          base_dir = f&quot;{ASSETS_PATH}/Background&quot;
- 237          is_randomized = background_cfg.get(&quot;random&quot;, False)
- 238          if is_randomized:
- 239              base_path = Path(base_dir)
- 240              hdr_files = [str(p) for p in base_path.rglob(&quot;*&quot;) if p.is_file() and p.suffix.lower() == &quot;.hdr&quot;]
- 241              if not hdr_files:
- 242                  texture_path = f&quot;{base_dir}/{background_cfg.get(&#x27;default&#x27;, &#x27;brown_photostudio_02_16k.hdr&#x27;)}&quot;
- 243                  category_name = background_cfg.get(&quot;default&quot;, &quot;brown_photostudio_02_16k.hdr&quot;)
- 244              else:
- 245                  texture_path = random.choice(hdr_files)
- 246                  category_name = Path(texture_path).name
- 247          else:
- 248              texture_path = f&quot;{base_dir}/{background_cfg.get(&#x27;default&#x27;, &#x27;brown_photostudio_02_16k.hdr&#x27;)}&quot;
- 249              category_name = background_cfg.get(&quot;default&quot;, &quot;brown_photostudio_02_16k.hdr&quot;)
- 250          if &quot;random&quot; in background_cfg:
- 251              background_cfg.pop(&quot;random&quot;)
- 252          if &quot;default&quot; in background_cfg:
- 253              background_cfg.pop(&quot;default&quot;)
- 254          background_cfg[&quot;texture_path&quot;] = texture_path
- 255          background_cfg[&quot;category_name&quot;] = category_name
- 256          self.background = background_cfg
- 257          return background_cfg</code></pre></section><section id="dojoLight"><h2>select_light()</h2><p>RoboDojo/env/scene_manager/layout_manager.py:286</p><pre><code> 286      def select_light(self, env_idx, light_cfg=None):
- 287          if light_cfg is None:
- 288              light_cfg = deepcopy(self.scene_config.Light)
- 289              light_cfg = OmegaConf.to_container(light_cfg, resolve=True)
- 290          for light_config_key in light_cfg.keys():
- 291              if isinstance(light_cfg[light_config_key][&quot;types&quot;], list):
- 292                  light_type = np.random.choice(light_cfg[light_config_key][&quot;types&quot;])
- 293              else:
- 294                  light_type = light_cfg[light_config_key][&quot;types&quot;]
- 295              light_cfg[light_config_key][&quot;types&quot;] = str(light_type)
- 296              all_light_type = [&quot;Rect&quot;, &quot;Sphere&quot;, &quot;Cylinder&quot;, &quot;Dome&quot;, &quot;Disk&quot;]
- 297              for lt in all_light_type:
- 298                  if lt != light_type and lt in light_cfg[light_config_key]:
- 299                      light_cfg[light_config_key].pop(lt)
- 300              prim_path, inst_name = self._generate_object_paths(
- 301                  env_idx, light_type, len(self.lights[env_idx]), type=&quot;Light&quot;
- 302              )
- 303              light_cfg[light_config_key][&quot;prim_path&quot;] = prim_path
- 304              light_cfg[light_config_key][&quot;inst_name&quot;] = inst_name
- 305              self.lights[env_idx].append(inst_name)
- 306              self.instance_type_by_env[env_idx][inst_name] = &quot;light&quot;
- 307          return light_cfg</code></pre></section><section id="dojoSeed"><h2>seed_everywhere()</h2><p>RoboDojo/env/seeding.py:37</p><pre><code>  37  def seed_everywhere(seed: int = -1) -&gt; int:
-  38      &quot;&quot;&quot;Set the seed for the environment.
-  39  
-  40      Args:
-  41          seed: The seed for random generator. Defaults to -1.
-  42  
-  43      Returns:
-  44          The seed used for random generator.
-  45      &quot;&quot;&quot;
-  46      # set seed for replicator
-  47      try:
-  48          import omni.replicator.core as rep
-  49  
-  50          rep.set_global_seed(seed)
-  51      except ModuleNotFoundError:
-  52          pass
-  53      random.seed(seed)
-  54      np.random.seed(seed)
-  55      # set seed for torch and other libraries
-  56      set_seed(seed)</code></pre></section><section id="randPose"><h2>rand_pose()</h2><p>RoboTwin/envs/utils/rand_create_actor.py:8</p><pre><code>   8  def rand_pose(
-   9      xlim: np.ndarray,
-  10      ylim: np.ndarray,
-  11      zlim: np.ndarray = [0.741],
-  12      ylim_prop=False,
-  13      rotate_rand=False,
-  14      rotate_lim=[0, 0, 0],
-  15      qpos=[1, 0, 0, 0],
-  16  ) -&gt; sapien.Pose:
-  17      if len(xlim) &lt; 2 or xlim[1] &lt; xlim[0]:
-  18          xlim = np.array([xlim[0], xlim[0]])
-  19      if len(ylim) &lt; 2 or ylim[1] &lt; ylim[0]:
-  20          ylim = np.array([ylim[0], ylim[0]])
-  21      if len(zlim) &lt; 2 or zlim[1] &lt; zlim[0]:
-  22          zlim = np.array([zlim[0], zlim[0]])
-  23  
-  24      x = np.random.uniform(xlim[0], xlim[1])
-  25      y = np.random.uniform(ylim[0], ylim[1])
-  26  
-  27      while ylim_prop and abs(x) &lt; 0.15 and y &gt; 0:
-  28          y = np.random.uniform(ylim[0], 0)
-  29  
-  30      z = np.random.uniform(zlim[0], zlim[1])
-  31  
-  32      rotate = qpos
-  33      if rotate_rand:
-  34          angles = [0, 0, 0]
-  35          for i in range(3):
-  36              angles[i] = np.random.uniform(-rotate_lim[i], rotate_lim[i])
-  37          rotate_quat = t3d.euler.euler2quat(angles[0], angles[1], angles[2])
-  38          rotate = t3d.quaternions.qmult(rotate, rotate_quat)
-  39  
-  40      return sapien.Pose([x, y, z], rotate)</code></pre></section><section id="policyNoise"><h2>sample_noise()</h2><p>XPolicyLab/policy/Pi_05/openpi/src/openpi/models_pytorch/pi0_pytorch.py:173</p><pre><code> 173      def sample_noise(self, shape, device):
- 174          return torch.normal(
- 175              mean=0.0,
- 176              std=1.0,
- 177              size=shape,
- 178              dtype=torch.float32,
- 179              device=device,
- 180          )</code></pre></section><section id="policyInit"><h2>__init__()</h2><p>XPolicyLab/policy/Pi_05/openpi/src/openpi/policies/policy.py:25</p><pre><code>  25      def __init__(
-  26          self,
-  27          model: _model.BaseModel,
-  28          *,
-  29          rng: at.KeyArrayLike | None = None,
-  30          transforms: Sequence[_transforms.DataTransformFn] = (),
-  31          output_transforms: Sequence[_transforms.DataTransformFn] = (),
-  32          sample_kwargs: dict[str, Any] | None = None,
-  33          metadata: dict[str, Any] | None = None,
-  34          pytorch_device: str = &quot;cpu&quot;,
-  35          is_pytorch: bool = False,
-  36      ):
-  37          &quot;&quot;&quot;Initialize the Policy.
-  38  
-  39          Args:
-  40              model: The model to use for action sampling.
-  41              rng: Random number generator key for JAX models. Ignored for PyTorch models.
-  42              transforms: Input data transformations to apply before inference.
-  43              output_transforms: Output data transformations to apply after inference.
-  44              sample_kwargs: Additional keyword arguments to pass to model.sample_actions.
-  45              metadata: Additional metadata to store with the policy.
-  46              pytorch_device: Device to use for PyTorch models (e.g., &quot;cpu&quot;, &quot;cuda:0&quot;).
-  47                            Only relevant when is_pytorch=True.
-  48              is_pytorch: Whether the model is a PyTorch model. If False, assumes JAX model.
-  49          &quot;&quot;&quot;
-  50          self._model = model
-  51          self._input_transform = _transforms.compose(transforms)
-  52          self._output_transform = _transforms.compose(output_transforms)
-  53          self._sample_kwargs = sample_kwargs or {}
-  54          self._metadata = metadata or {}
-  55          self._is_pytorch_model = is_pytorch
-  56          self._pytorch_device = pytorch_device
-  57  
-  58          if self._is_pytorch_model:
-  59              self._model = self._model.to(pytorch_device)
-  60              self._model.eval()
-  61              self._sample_actions = model.sample_actions
-  62          else:
-  63              # JAX model setup
-  64              self._sample_actions = nnx_utils.module_jit(model.sample_actions)
-  65              self._rng = rng or jax.random.key(0)</code></pre></section><section id="setup"><h2>_init_task_env_()</h2><p>RoboTwin/envs/_base_task.py:43</p><pre><code>  43      def _init_task_env_(self, table_xy_bias=[0, 0], table_height_bias=0, **kwags):
-  44          &quot;&quot;&quot;
-  45          Initialization TODO
-  46          - `self.FRAME_IDX`: The index of the file saved for the current scene.
-  47          - `self.fcitx5-configtool`: Left gripper pose (close &lt;=0, open &gt;=0.4).
-  48          - `self.ep_num`: Episode ID.
-  49          - `self.task_name`: Task name.
-  50          - `self.save_dir`: Save path.`
-  51          - `self.left_original_pose`: Left arm original pose.
-  52          - `self.right_original_pose`: Right arm original pose.
-  53          - `self.left_arm_joint_id`: [6,14,18,22,26,30].
-  54          - `self.right_arm_joint_id`: [7,15,19,23,27,31].
-  55          - `self.render_fre`: Render frequency.
-  56          &quot;&quot;&quot;
-  57          super().__init__()
-  58          ta.setup_logging(&quot;CRITICAL&quot;)  # hide logging
-  59          np.random.seed(kwags.get(&quot;seed&quot;, 0))
-  60          torch.manual_seed(kwags.get(&quot;seed&quot;, 0))
-  61          # random.seed(kwags.get(&#x27;seed&#x27;, 0))
-  62  
-  63          self.FRAME_IDX = 0
-  64          self.task_name = kwags.get(&quot;task_name&quot;)
-  65          self.save_dir = kwags.get(&quot;save_path&quot;, &quot;data&quot;)
-  66          self.ep_num = kwags.get(&quot;now_ep_num&quot;, 0)
-  67          self.render_freq = kwags.get(&quot;render_freq&quot;, 10)
-  68          self.data_type = kwags.get(&quot;data_type&quot;, None)
-  69          self.save_data = kwags.get(&quot;save_data&quot;, False)
-  70          self.dual_arm = kwags.get(&quot;dual_arm&quot;, True)
-  71          self.eval_mode = kwags.get(&quot;eval_mode&quot;, False)
-  72  
-  73          self.need_topp = True  # TODO
-  74  
-  75          # Random
-  76          random_setting = kwags.get(&quot;domain_randomization&quot;)
-  77          self.random_background = random_setting.get(&quot;random_background&quot;, False)
-  78          self.cluttered_table = random_setting.get(&quot;cluttered_table&quot;, False)
-  79          self.clean_background_rate = random_setting.get(&quot;clean_background_rate&quot;, 1)
-  80          self.random_head_camera_dis = random_setting.get(&quot;random_head_camera_dis&quot;, 0)
-  81          self.random_table_height = random_setting.get(&quot;random_table_height&quot;, 0)
-  82          self.random_light = random_setting.get(&quot;random_light&quot;, False)
-  83          self.crazy_random_light_rate = random_setting.get(&quot;crazy_random_light_rate&quot;, 0)
-  84          self.crazy_random_light = (0 if not self.random_light else np.random.rand() &lt; self.crazy_random_light_rate)
-  85          self.random_embodiment = random_setting.get(&quot;random_embodiment&quot;, False)  # TODO
-  86  
-  87          self.file_path = []
-  88          self.plan_success = True
-  89          self.step_lim = None
-  90          self.fix_gripper = False
-  91          self.setup_scene()
-  92  
-      … 完整函数请查看源码</code></pre></section><section id="actors"><h2>load_actors()</h2><p>RoboTwin/envs/stack_blocks_two.py:13</p><pre><code>  13      def load_actors(self):
-  14          block_half_size = 0.025
-  15          block_pose_lst = []
-  16          # NOTE 1.1.1 [在桌面左右区域随机生成两个 5cm 方块]
-  17          for i in range(2):
-  18              block_pose = rand_pose(
-  19                  xlim=[-0.28, 0.28],
-  20                  ylim=[-0.08, 0.05],
-  21                  zlim=[0.741 + block_half_size],
-  22                  qpos=[1, 0, 0, 0],
-  23                  ylim_prop=True,
-  24                  rotate_rand=True,
-  25                  rotate_lim=[0, 0, 0.75],
-  26              )
-  27  
-  28              def check_block_pose(block_pose):
-  29                  for j in range(len(block_pose_lst)):
-  30                      if (np.sum(pow(block_pose.p[:2] - block_pose_lst[j].p[:2], 2)) &lt; 0.01):
-  31                          return False
-  32                  return True
-  33              # NOTE 1.1.2 [避免方块之间太近，或占用中间堆叠区域]
-  34              while (abs(block_pose.p[0]) &lt; 0.05 or np.sum(pow(block_pose.p[:2] - np.array([0, -0.1]), 2)) &lt; 0.0225
-  35                     or not check_block_pose(block_pose)):
-  36                  block_pose = rand_pose(
-  37                      xlim=[-0.28, 0.28],
-  38                      ylim=[-0.08, 0.05],
-  39                      zlim=[0.741 + block_half_size],
-  40                      qpos=[1, 0, 0, 0],
-  41                      ylim_prop=True,
-  42                      rotate_rand=True,
-  43                      rotate_lim=[0, 0, 0.75],
-  44                  )
-  45              block_pose_lst.append(deepcopy(block_pose))
-  46  
-  47          def create_block(block_pose, color):
-  48              return create_box(
-  49                  scene=self,
-  50                  pose=block_pose,
-  51                  half_size=(block_half_size, block_half_size, block_half_size),
-  52                  color=color,
-  53                  name=&quot;box&quot;,
-  54              )
-  55          # NOTE 1.1.3 [创建红色和绿色方块]
-  56          self.block1 = create_block(block_pose_lst[0], (1, 0, 0))
-  57          self.block2 = create_block(block_pose_lst[1], (0, 1, 0))
-  58  
-  59          # NOTE 1.1.4 [添加禁止区域]
-  60          self.add_prohibit_area(self.block1, padding=0.07)
-  61          self.add_prohibit_area(self.block2, padding=0.07)
-  62  
-      … 完整函数请查看源码</code></pre></section><section id="play"><h2>play_once()</h2><p>RoboTwin/envs/stack_blocks_two.py:69</p><pre><code>  69      def play_once(self):
-  70          # Initialize tracking variables for gripper and actor
-  71          self.last_gripper = None
-  72          self.last_actor = None
-  73  
-  74          # NOTE 1.2 [pick_and_place_block] 重点看函数 skip-pick_and_place_block，arm_tag1 和 arm_tag2 都是基于这个逻辑
-  75          
-  76          # Pick and place the first block (block1) and get its arm tag
-  77          arm_tag1 = self.pick_and_place_block(self.block1)
-  78          # Pick and place the second block (block2) and get its arm tag
-  79          arm_tag2 = self.pick_and_place_block(self.block2)
-  80  
-  81          # Store information about the blocks and their associated arms
-  82          self.info[&quot;info&quot;] = {
-  83              &quot;{A}&quot;: &quot;red block&quot;,
-  84              &quot;{B}&quot;: &quot;green block&quot;,
-  85              &quot;{a}&quot;: arm_tag1,
-  86              &quot;{b}&quot;: arm_tag2,
-  87          }
-  88          return self.info</code></pre></section><section id="pick"><h2>pick_and_place_block()</h2><p>RoboTwin/envs/stack_blocks_two.py:90</p><pre><code>  90      def pick_and_place_block(self, block: Actor):
-  91          block_pose = block.get_pose().p # [x, y, z]
-  92          # SUBNOTE x &lt; 0 就是左臂，&gt; 0 就是右臂
-  93          arm_tag = ArmTag(&quot;left&quot; if block_pose[0] &lt; 0 else &quot;right&quot;)
-  94          
-  95          # SUBNOTE 如果这次选中的机械臂和前一次不一样，就将 last_gripper 放回原位，然后
-  96          if self.last_gripper is not None and (self.last_gripper != arm_tag):
-  97              self.move(
-  98                  # NOTE 1.1.1 [grasp_actor] 得到两个末端目标，arm_tag 对应的机械臂，移动到
-  99                  # SUBNOTE 返回的是 Action
- 100                  self.grasp_actor(block, arm_tag=arm_tag, pre_grasp_dis=0.09),  # arm_tag
- 101                  self.back_to_origin(arm_tag=arm_tag.opposite),  # arm_tag.opposite
- 102              )
- 103          # SUBNOTE 如果这次的机械臂和上次是同一个，就直接移动到目标位置
- 104          else:
- 105              self.move(self.grasp_actor(block, arm_tag=arm_tag, pre_grasp_dis=0.09))  # arm_tag
- 106  
- 107          # SUBNOTE 位移
- 108          self.move(self.move_by_displacement(arm_tag=arm_tag, z=0.07))  # arm_tag
- 109  
- 110          if self.last_actor is None:
- 111              target_pose = [0, -0.13, 0.75 + self.table_z_bias, 0, 1, 0, 0]
- 112          else:
- 113              target_pose = self.last_actor.get_functional_point(1)
- 114  
- 115          # SUBNOTE 移动到放置的位置
- 116          self.move(
- 117              self.place_actor(
- 118                  block,
- 119                  target_pose=target_pose,
- 120                  arm_tag=arm_tag,
- 121                  functional_point_id=0,
- 122                  pre_dis=0.05,
- 123                  dis=0.,
- 124                  pre_dis_axis=&quot;fp&quot;,
- 125              ))
- 126          self.move(self.move_by_displacement(arm_tag=arm_tag, z=0.07))  # arm_tag
- 127  
- 128          self.last_gripper = arm_tag
- 129          self.last_actor = block
- 130          return str(arm_tag)</code></pre></section><section id="grasp"><h2>grasp_actor()</h2><p>RoboTwin/envs/_base_task.py:1257</p><pre><code>1257      def grasp_actor(
-1258          self,
-1259          actor: Actor,
-1260          arm_tag: ArmTag,
-1261          pre_grasp_dis=0.1,
-1262          grasp_dis=0,
-1263          gripper_pos=0.0,
-1264          contact_point_id: list | float = None,
-1265      ):0
-1266          # SUBNOTE 前面的sub trajectory 规划失败，后面也不用继续了
-1267          if not self.plan_success:
-1268              return None, []
-1269  
-1270          # NOTE 1.1 [回放模式] 对于物体的抓取点和机械臂的抓取偏好，得到两个末端目标
-1271          if self.need_plan == False:
-1272              if pre_grasp_dis == grasp_dis:
-1273                  return arm_tag, [
-1274                      Action(arm_tag, &quot;move&quot;, target_pose=[0, 0, 0, 0, 0, 0, 0]),
-1275                      Action(arm_tag, &quot;close&quot;, target_gripper_pos=gripper_pos),
-1276                  ]
-1277              else:
-1278                  return arm_tag, [
-1279                      Action(arm_tag, &quot;move&quot;, target_pose=[0, 0, 0, 0, 0, 0, 0]),
-1280                      Action(
-1281                          arm_tag,
-1282                          &quot;move&quot;,
-1283                          target_pose=[0, 0, 0, 0, 0, 0, 0],
-1284                          constraint_pose=[1, 1, 1, 0, 0, 0],
-1285                      ),
-1286                      Action(arm_tag, &quot;close&quot;, target_gripper_pos=gripper_pos),
-1287                  ]
-1288  
-1289          # NOTE 1.2 [正常规划模式] 对于物体的抓取点和机械臂的抓取偏好，得到两个末端目标
-1290          # SUBNOTE pre_grasp_pose 先停在物体前方，grasp_pose 夹爪到达抓取位置
-1291          pre_grasp_pose, grasp_pose = self.choose_grasp_pose(
-1292              actor,
-1293              arm_tag=arm_tag,
-1294              pre_dis=pre_grasp_dis,
-1295              target_dis=grasp_dis,
-1296              contact_point_id=contact_point_id,
-1297          )
-1298          if pre_grasp_pose == grasp_pose:
-1299              return arm_tag, [
-1300                  # SUBNOTE skip-Action Action 类
-1301                  Action(arm_tag, &quot;move&quot;, target_pose=pre_grasp_pose),
-1302                  Action(arm_tag, &quot;close&quot;, target_gripper_pos=gripper_pos),
-1303              ]
-1304          else:
-1305              return arm_tag, [
-1306                  # SUBNOTE 如果 pre_grasp_pose 和 grasp_pose 不一样的话，就要 move 两次
-      … 完整函数请查看源码</code></pre></section><section id="choose"><h2>choose_grasp_pose()</h2><p>RoboTwin/envs/_base_task.py:1169</p><pre><code>1169      def choose_grasp_pose(
-1170          self,
-1171          actor: Actor,
-1172          arm_tag: ArmTag,
-1173          pre_dis=0.1,
-1174          target_dis=0,
-1175          contact_point_id: list | float = None,
-1176      ) -&gt; list:
-1177          &quot;&quot;&quot;
-1178          Test the grasp pose function.
-1179          - actor: The actor to be grasped.
-1180          - arm_tag: The arm to be used for grasping, either &quot;left&quot; or &quot;right&quot;.
-1181          - pre_dis: The distance in front of the grasp point, default is 0.1.
-1182          &quot;&quot;&quot;
-1183          if not self.plan_success:
-1184              return
-1185          res_pre_top_down_pose = None
-1186          res_top_down_pose = None
-1187          dis_top_down = 1e9
-1188          res_pre_side_pose = None
-1189          res_side_pose = None
-1190          dis_side = 1e9
-1191          res_pre_pose = None
-1192          res_pose = None
-1193          dis = 1e9
-1194  
-1195          pref_direction = self.robot.get_grasp_perfect_direction(arm_tag)
-1196  
-1197          def get_grasp_pose(pre_grasp_pose, pre_grasp_dis):
-1198              grasp_pose = deepcopy(pre_grasp_pose)
-1199              grasp_pose = np.array(grasp_pose)
-1200              direction_mat = t3d.quaternions.quat2mat(grasp_pose[-4:])
-1201              grasp_pose[:3] += [pre_grasp_dis, 0, 0] @ np.linalg.inv(direction_mat)
-1202              grasp_pose = grasp_pose.tolist()
-1203              return grasp_pose
-1204  
-1205          def check_pose(pre_pose, pose, arm_tag):
-1206              if arm_tag == &quot;left&quot;:
-1207                  plan_func = self.robot.left_plan_path
-1208              else:
-1209                  plan_func = self.robot.right_plan_path
-1210              pre_path = plan_func(pre_pose)
-1211              if pre_path[&quot;status&quot;] != &quot;Success&quot;:
-1212                  return False
-1213              pre_qpos = pre_path[&quot;position&quot;][-1]
-1214              return plan_func(pose)[&quot;status&quot;] == &quot;Success&quot;
-1215  
-1216          if contact_point_id is not None:
-1217              if type(contact_point_id) != list:
-1218                  contact_point_id = [contact_point_id]
-      … 完整函数请查看源码</code></pre></section><section id="transformPlace"><h2>get_place_pose()</h2><p>RoboTwin/envs/utils/transforms.py:450</p><pre><code> 450  def get_place_pose(
- 451      actor_pose: np.ndarray | sapien.Pose | list,
- 452      target_pose: np.ndarray | sapien.Pose | list,
- 453      constrain: Literal[&quot;free&quot;, &quot;align&quot;] = &quot;free&quot;,
- 454      align_axis: list[np.ndarray] | np.ndarray | list = None,
- 455      actor_axis: np.ndarray | list = [1, 0, 0],
- 456      actor_axis_type: Literal[&quot;actor&quot;, &quot;world&quot;] = &quot;actor&quot;,
- 457      z_transform: bool = True,
- 458  ) -&gt; list:
- 459      &quot;&quot;&quot;
- 460      获取物体应当被放置到的位置
- 461      考虑因素：
- 462          1. 三维坐标与给定坐标一致
- 463          2. 物体的朝向合理
- 464              - 物体 z 轴与给定坐标 z 轴一致
- 465              - 满足在 xy 平面上的一定约束
- 466                  - 无约束（直接采用物体当前的 x,y 在 xOy 平面上的投影）
- 467                  - 物体的 x 轴对齐给定 x 轴
- 468                  - 选取物体的 x 轴与给定的世界轴单位向量集合中点积最小的方向
- 469  
- 470      actor_pose: 物体当前的 pose
- 471      target_pose: 物体应当被放置到的位置
- 472      constrain: 物体的约束类型
- 473          - free: 无约束
- 474          - align: 物体的 x 轴与给定的世界轴向量集合中点积最小的方向
- 475      align_axis: 给定的世界轴向量集合，如果设置为 None，默认使用 target_pose 的 x 轴
- 476      actor_axis: 计算点积的 actor 轴，默认使用 x 轴
- 477      actor_axis_type: actor_axis 的类型，默认使用局部坐标系
- 478          - actor: actor_pose 的局部坐标系
- 479          - world: 世界坐标系
- 480      &quot;&quot;&quot;
- 481      actor_pose_mat = _toPose(actor_pose).to_transformation_matrix()
- 482      target_pose_mat = _toPose(target_pose).to_transformation_matrix()
- 483  
- 484      # 将物体的三维坐标与给定坐标对齐
- 485      actor_pose_mat[:3, 3] = target_pose_mat[:3, 3]
- 486  
- 487      target_x = target_pose_mat[:3, 0]
- 488      target_y = target_pose_mat[:3, 1]
- 489      target_z = target_pose_mat[:3, 2]
- 490  
- 491      # 将物体的 z 轴与给定坐标的 z 轴对齐
- 492      actor2world = np.array([[1.0, 0.0, 0.0], [0.0, 0.0, -1.0], [0.0, 1.0, 0.0]]).T
- 493      if z_transform:
- 494          z_align_matrix = get_align_matrix(actor_pose_mat[:3, :3] @ actor2world[:3, 2], target_z)
- 495      else:
- 496          z_align_matrix = get_align_matrix(actor_pose_mat[:3, 2], target_z)
- 497      actor_pose_mat[:3, :3] = z_align_matrix @ actor_pose_mat[:3, :3]
- 498  
- 499      if constrain == &quot;align&quot;:
-      … 完整函数请查看源码</code></pre></section><section id="basePlace"><h2>get_place_pose()</h2><p>RoboTwin/envs/_base_task.py:1318</p><pre><code>1318      def get_place_pose(
-1319          self,
-1320          actor: Actor,
-1321          arm_tag: ArmTag,
-1322          target_pose: list | np.ndarray,
-1323          constrain: Literal[&quot;free&quot;, &quot;align&quot;, &quot;auto&quot;] = &quot;auto&quot;,
-1324          align_axis: list[np.ndarray] | np.ndarray | list = None,
-1325          actor_axis: np.ndarray | list = [1, 0, 0],
-1326          actor_axis_type: Literal[&quot;actor&quot;, &quot;world&quot;] = &quot;actor&quot;,
-1327          functional_point_id: int = None,
-1328          pre_dis: float = 0.1,
-1329          pre_dis_axis: Literal[&quot;grasp&quot;, &quot;fp&quot;] | np.ndarray | list = &quot;grasp&quot;,
-1330      ):
-1331  
-1332          if not self.plan_success:
-1333              return [-1, -1, -1, -1, -1, -1, -1]
-1334  
-1335  
-1336          # NOTE 5.1 [actor_matrix] 获取方块当前位姿，以及用于放置对齐的参考点
-1337          actor_matrix = actor.get_pose().to_transformation_matrix()
-1338  
-1339          # SUBNOTE 如果指定了功能点，就使用功能点作为放置参考
-1340          if functional_point_id is not None:
-1341              place_start_pose = actor.get_functional_point(functional_point_id, &quot;pose&quot;)
-1342              z_transform = False
-1343          # SUBNOTE 否则使用方块自身的位姿
-1344          else:
-1345              place_start_pose = actor.get_pose()
-1346              z_transform = True
-1347  
-1348          # NOTE 5.2 [end_effector_pose] 获取当前机械臂末端（夹爪）的位姿
-1349          end_effector_pose = (self.robot.get_left_ee_pose() if arm_tag == &quot;left&quot; else self.robot.get_right_ee_pose())
-1350  
-1351          # NOTE 5.3 计算方块的目标放置位姿
-1352          if constrain == &quot;auto&quot;:
-1353              grasp_direct_vec = place_start_pose.p - end_effector_pose[:3]
-1354              if np.abs(np.dot(grasp_direct_vec, [0, 0, 1])) &lt;= 0.1:
-1355                  # SUBNOTE target_pose 已经指定了目标位置
-1356                  # SUBNOTE 这里主要根据约束条件，确定方块最终应该采用什么朝向
-1357                  place_pose = get_place_pose(
-1358                      place_start_pose,
-1359                      target_pose,
-1360                      constrain=&quot;align&quot;,
-1361                      actor_axis=grasp_direct_vec,
-1362                      actor_axis_type=&quot;world&quot;,
-1363                      align_axis=[1, 1, 0] if arm_tag == &quot;left&quot; else [-1, 1, 0],
-1364                      z_transform=z_transform,
-1365                  )
-1366              else:
-1367                  camera_vec = transforms._toPose(end_effector_pose).to_transformation_matrix()[:3, 2]
-      … 完整函数请查看源码</code></pre></section><section id="planner"><h2>plan_path()</h2><p>RoboTwin/envs/robot/planner.py:94</p><pre><code>  94          def plan_path(
-  95              self,
-  96              curr_joint_pos,
-  97              target_gripper_pose,
-  98              constraint_pose=None,
-  99              arms_tag=None,
- 100          ):  
- 101              world_base_pose = np.concatenate([
- 102                  np.array(self.robot_origion_pose.p),
- 103                  np.array(self.robot_origion_pose.q),
- 104              ])
- 105              world_target_pose = np.concatenate([np.array(target_gripper_pose.p), np.array(target_gripper_pose.q)])
- 106              target_pose_p, target_pose_q = self._trans_from_world_to_base(world_base_pose, world_target_pose)
- 107              if not (&quot;aloha-agilex&quot; in self.yml_path):
- 108                  target_pose_p[0] += self.frame_bias[0]
- 109                  target_pose_p[1] += self.frame_bias[1]
- 110                  target_pose_p[2] += self.frame_bias[2]
- 111              else: # patch for aloha-agilex
- 112                  T_target = t3d.affines.compose(target_pose_p, t3d.quaternions.quat2mat(target_pose_q), [1, 1, 1])
- 113                  T_bias = t3d.affines.compose(self.frame_bias, np.eye(3), [1, 1, 1])
- 114  
- 115                  if arms_tag == &quot;left&quot;:
- 116                      rot = t3d.axangles.axangle2mat([0, 0, 1], -0.02)
- 117                  elif arms_tag == &quot;right&quot;:
- 118                      rot = t3d.axangles.axangle2mat([0, 0, 1], -0.01)
- 119                  else:
- 120                      raise ValueError(f&quot;Invalid arms_tag: {arms_tag}&quot;)
- 121  
- 122                  T_rot = t3d.affines.compose([0, 0, 0], rot, [1, 1, 1])
- 123                  T_new = T_rot @ T_bias @ T_target
- 124                  target_pose_p = T_new[:3, 3]
- 125                  target_pose_q = t3d.quaternions.mat2quat(T_new[:3, :3])
- 126  
- 127              goal_pose_of_ee = CuroboPose.from_list(list(target_pose_p) + list(target_pose_q))
- 128              joint_indices = [self.all_joints.index(name) for name in self.active_joints_name if name in self.all_joints]
- 129              joint_angles = [curr_joint_pos[index] for index in joint_indices]
- 130              joint_angles = [round(angle, 5) for angle in joint_angles]  # avoid the precision problem
- 131              start_joint_states = JointState.from_position(
- 132                  torch.tensor(joint_angles).cuda().reshape(1, -1),
- 133                  joint_names=self.active_joints_name,
- 134              )
- 135              # plan
- 136              plan_config = MotionGenPlanConfig(max_attempts=10)
- 137  
- 138              # NOTE 1.1 [运动约束] 比如 [1,1,1,0,0,0] 就是控制夹爪的角度不变，只改变机械臂末端位置
- 139              if constraint_pose is not None:
- 140                  
- 141                  # SUBNOTE [创建一个位姿约束]
- 142                  pose_cost_metric = PoseCostMetric(
- 143                      hold_partial_pose=True,
-      … 完整函数请查看源码</code></pre></section><section id="dense"><h2>take_dense_action()</h2><p>RoboTwin/envs/_base_task.py:1515</p><pre><code>1515      def take_dense_action(self, control_seq, save_freq=-1):
-1516          &quot;&quot;&quot;
-1517          control_seq:
-1518              left_arm, right_arm, left_gripper, right_gripper
-1519          &quot;&quot;&quot;
-1520          left_arm, left_gripper, right_arm, right_gripper = (
-1521              control_seq[&quot;left_arm&quot;],
-1522              control_seq[&quot;left_gripper&quot;],
-1523              control_seq[&quot;right_arm&quot;],
-1524              control_seq[&quot;right_gripper&quot;],
-1525          )
-1526  
-1527          save_freq = self.save_freq if save_freq == -1 else save_freq
-1528          if save_freq != None:
-1529              self._take_picture()
-1530  
-1531          max_control_len = 0
-1532  
-1533          if left_arm is not None:
-1534              max_control_len = max(max_control_len, left_arm[&quot;position&quot;].shape[0])
-1535          if left_gripper is not None:
-1536              max_control_len = max(max_control_len, left_gripper[&quot;num_step&quot;])
-1537          if right_arm is not None:
-1538              max_control_len = max(max_control_len, right_arm[&quot;position&quot;].shape[0])
-1539          if right_gripper is not None:
-1540              max_control_len = max(max_control_len, right_gripper[&quot;num_step&quot;])
-1541  
-1542          for control_idx in range(max_control_len):
-1543  
-1544              if (left_arm is not None and control_idx &lt; left_arm[&quot;position&quot;].shape[0]):  # control left arm
-1545                  self.robot.set_arm_joints(
-1546                      left_arm[&quot;position&quot;][control_idx],
-1547                      left_arm[&quot;velocity&quot;][control_idx],
-1548                      &quot;left&quot;,
-1549                  )
-1550  
-1551              if left_gripper is not None and control_idx &lt; left_gripper[&quot;num_step&quot;]:
-1552                  self.robot.set_gripper(
-1553                      left_gripper[&quot;result&quot;][control_idx],
-1554                      &quot;left&quot;,
-1555                      left_gripper[&quot;per_step&quot;],
-1556                  )  # TODO
-1557  
-1558              if (right_arm is not None and control_idx &lt; right_arm[&quot;position&quot;].shape[0]):  # control right arm
-1559                  self.robot.set_arm_joints(
-1560                      right_arm[&quot;position&quot;][control_idx],
-1561                      right_arm[&quot;velocity&quot;][control_idx],
-1562                      &quot;right&quot;,
-1563                  )
-1564  
-      … 完整函数请查看源码</code></pre></section><section id="collect"><h2>run()</h2><p>RoboTwin/scripts/collect_data.py:154</p><pre><code> 154  def run(TASK_ENV, args):
- 155      epid, suc_num, fail_num, seed_list = 0, 0, 0, []
- 156  
- 157      print(f&quot;Task Name: \033[34m{args[&#x27;task_name&#x27;]}\033[0m&quot;)
- 158  
- 159      # =========== Collect Seed ===========
- 160      os.makedirs(args[&quot;save_path&quot;], exist_ok=True)
- 161  
- 162      if not args[&quot;use_seed&quot;]:
- 163          print(&quot;\033[93m&quot; + &quot;[Start Seed and Pre Motion Data Collection]&quot; + &quot;\033[0m&quot;)
- 164          args[&quot;need_plan&quot;] = True
- 165  
- 166          if os.path.exists(os.path.join(args[&quot;save_path&quot;], &quot;seed.txt&quot;)):
- 167              with open(os.path.join(args[&quot;save_path&quot;], &quot;seed.txt&quot;), &quot;r&quot;) as file:
- 168                  seed_list = file.read().split()
- 169                  if len(seed_list) != 0:
- 170                      seed_list = [int(i) for i in seed_list]
- 171                      suc_num = len(seed_list)
- 172                      epid = max(seed_list) + 1
- 173              print(f&quot;Exist seed file, Start from: {epid} / {suc_num}&quot;)
- 174  
- 175          # NOTE 1.1 [筛选轨迹]
- 176          while suc_num &lt; args[&quot;episode_num&quot;]:
- 177              try:
- 178                  # NOTE 1.1-a [setup_demo 启动、play_once 边规划边仿真]
- 179                  TASK_ENV.setup_demo(now_ep_num=suc_num, seed=epid, **args)
- 180                  TASK_ENV.play_once()
- 181  
- 182                  # NOTE 1.1-b [检查路径规划是否成功、任务是否完成以及规划关节是否合法]
- 183                  if TASK_ENV.plan_success and TASK_ENV.check_success():
- 184                      joints_ok, joint_excess = TASK_ENV.planned_joints_legal()
- 185                      if not joints_ok:
- 186                          print(
- 187                              f&quot;simulate data episode {suc_num} fail! (seed = {epid}) &quot;
- 188                              f&quot;planned joints exceed limits (excess={joint_excess:.3f} rad)&quot;
- 189                          )
- 190                          fail_num += 1
- 191                      else:
- 192                          print(f&quot;simulate data episode {suc_num} success! (seed = {epid})&quot;)
- 193                          seed_list.append(epid)
- 194                          TASK_ENV.save_traj_data(suc_num)
- 195                          suc_num += 1
- 196                  else:
- 197                      print(f&quot;simulate data episode {suc_num} fail! (seed = {epid})&quot;)
- 198                      fail_num += 1
- 199  
- 200                  TASK_ENV.close_env()
- 201  
- 202                  if args[&quot;render_freq&quot;]:
- 203                      TASK_ENV.viewer.close()
-      … 完整函数请查看源码</code></pre></section><section id="hdf5"><h2>create_xpolicylab_hdf5()</h2><p>RoboTwin/envs/utils/pkl2hdf5.py:79</p><pre><code>  79  def create_xpolicylab_hdf5(data, hdf5_path, instructions, frequency):
-  80      joints = data[&quot;joint_action&quot;]
-  81      frame_num = len(joints[&quot;left_arm&quot;])
-  82      if frame_num &lt; 2:
-  83          raise ValueError(&quot;At least two frames are required to create state/action pairs&quot;)
-  84  
-  85      instruction_values = [str(value) for value in (instructions or []) if str(value)]
-  86      if not instruction_values:
-  87          instruction_values = [&quot;&quot;]
-  88  
-  89      with h5py.File(hdf5_path, &quot;w&quot;) as f:
-  90          string_dtype = h5py.string_dtype(encoding=&quot;utf-8&quot;)
-  91          f.attrs[&quot;source_format&quot;] = &quot;RoboTwin&quot;
-  92          f.attrs[&quot;source_path&quot;] = &quot;native_collection&quot;
-  93          f.create_dataset(&quot;data_format_version&quot;, data=&quot;v1.0&quot;, dtype=string_dtype)
-  94          f.create_dataset(
-  95              &quot;instructions&quot;,
-  96              data=json.dumps(instruction_values, ensure_ascii=False),
-  97              dtype=string_dtype,
-  98          )
-  99          f.create_group(&quot;additional_info&quot;).create_dataset(
- 100              &quot;frequency&quot;, data=np.asarray(frequency, dtype=np.int32)
- 101          )
- 102  
- 103          state = f.create_group(&quot;state&quot;)
- 104          action = f.create_group(&quot;action&quot;)
- 105          joint_fields = [
- 106              (&quot;left_arm&quot;, &quot;left_arm_joint_states&quot;),
- 107              (&quot;left_gripper&quot;, &quot;left_ee_joint_states&quot;),
- 108              (&quot;right_arm&quot;, &quot;right_arm_joint_states&quot;),
- 109              (&quot;right_gripper&quot;, &quot;right_ee_joint_states&quot;),
- 110          ]
- 111          for source_name, target_name in joint_fields:
- 112              if source_name not in joints:
- 113                  continue
- 114              values = _ensure_2d(joints[source_name])
- 115              state.create_dataset(target_name, data=values[:-1])
- 116              action.create_dataset(target_name, data=values[1:])
- 117  
- 118          endpose = data.get(&quot;endpose&quot;, {})
- 119          for source_name, target_name in [
- 120              (&quot;left_endpose&quot;, &quot;left_ee_poses&quot;),
- 121              (&quot;right_endpose&quot;, &quot;right_ee_poses&quot;),
- 122          ]:
- 123              if source_name not in endpose:
- 124                  continue
- 125              values = _ensure_2d(endpose[source_name])
- 126              state.create_dataset(target_name, data=values[:-1])
- 127              action.create_dataset(target_name, data=values[1:])
- 128  
-      … 完整函数请查看源码</code></pre></section><section id="seeds"><h2>init_eval()</h2><p>RoboDojo/env/seed_manager/seed_manager.py:27</p><pre><code>  27      def init_eval(
-  28          self,
-  29          completed_layout_ids: Iterable[int] | None = None,
-  30          abandoned_layout_ids: Iterable[int] | None = None,
-  31      ):
-  32          self.eval_seed = self.config.get(&quot;seed&quot;, 0)
-  33          layout_dir = Path(ASSETS_PATH, &quot;Eval_Layout&quot;, BENCHMARK, self.config_name, str(self.eval_seed))
-  34          pattern = re.compile(rf&quot;{re.escape(self.task_name)}_\d+\.json&quot;)
-  35          matching_files = sorted(
-  36              [p for p in layout_dir.iterdir() if pattern.fullmatch(p.name)],
-  37              key=lambda p: int(p.stem.rsplit(&quot;_&quot;, 1)[-1]),
-  38          )
-  39  
-  40          matching_files = [str(p) for p in matching_files]
-  41          self.seed_info = {}
-  42          for idx, file_path in enumerate(matching_files):
-  43              self.seed_info[idx] = {&quot;scene_layout&quot;: file_path}
-  44  
-  45          all_layout_ids = list(range(len(matching_files)))
-  46          excluded = set(int(s) for s in (completed_layout_ids or [])) | set(int(s) for s in (abandoned_layout_ids or []))
-  47          if excluded:
-  48              self.seed_list: List[int] = [s for s in all_layout_ids if s not in excluded]
-  49              print(
-  50                  f&quot;[SeedManager] init_eval resume filter: excluded={len(excluded)} &quot;
-  51                  f&quot;remaining={len(self.seed_list)}/{len(all_layout_ids)}&quot;
-  52              )
-  53          else:
-  54              self.seed_list = all_layout_ids
-  55          self.st_idx = 0
-  56          self.ed_idx = len(self.seed_list)
-  57  
-  58          self.type = &quot;eval&quot;
-  59          self.idx = 0
-  60          self._current_batch_seeds = None</code></pre></section><section id="layout"><h2>set_saved_layout()</h2><p>RoboDojo/env/scene_manager/layout_manager.py:108</p><pre><code> 108      def set_saved_layout(self, env_idx: int, layout):
- 109          self.saved_layouts[env_idx] = layout</code></pre></section><section id="encode"><h2>encode_obs()</h2><p>XPolicyLab/policy/Pi_05/model.py:185</p><pre><code> 185  def encode_obs(observation, action_type, robot_action_dim_info):
- 186      if &quot;images&quot; in observation and &quot;state&quot; in observation:
- 187          state = np.asarray(observation[&quot;state&quot;], dtype=np.float32)
- 188          images = {
- 189              &quot;cam_high&quot;: ensure_chw_uint8(observation[&quot;images&quot;][&quot;cam_high&quot;]),
- 190              &quot;cam_left_wrist&quot;: ensure_chw_uint8(observation[&quot;images&quot;][&quot;cam_left_wrist&quot;]),
- 191              &quot;cam_right_wrist&quot;: ensure_chw_uint8(observation[&quot;images&quot;][&quot;cam_right_wrist&quot;]),
- 192          }
- 193          prompt = observation.get(&quot;instruction&quot;)
- 194          return {&quot;state&quot;: state, &quot;images&quot;: images, &quot;prompt&quot;: prompt}
- 195  
- 196      if robot_action_dim_info is None:
- 197          raise ValueError(&quot;env_cfg_type is required when encoding raw environment observations.&quot;)
- 198  
- 199      images = {
- 200          &quot;cam_high&quot;: ensure_chw_uint8(extract_image(observation, [&quot;cam_high&quot;, &quot;cam_head&quot;, &quot;head_camera&quot;, &quot;top_camera&quot;])),
- 201          &quot;cam_left_wrist&quot;: ensure_chw_uint8(
- 202              extract_image(observation, [&quot;cam_left_wrist&quot;, &quot;left_camera&quot;, &quot;left_wrist&quot;, &quot;wrist_left&quot;])
- 203          ),
- 204          &quot;cam_right_wrist&quot;: ensure_chw_uint8(
- 205              extract_image(observation, [&quot;cam_right_wrist&quot;, &quot;right_camera&quot;, &quot;right_wrist&quot;, &quot;wrist_right&quot;])
- 206          ),
- 207      }
- 208      state = pack_robot_state(observation, action_type, robot_action_dim_info, source_type=&quot;obs&quot;).astype(np.float32)
- 209      prompt = observation.get(&quot;instruction&quot;)
- 210      return {&quot;state&quot;: state, &quot;images&quot;: images, &quot;prompt&quot;: prompt}</code></pre></section><section id="pack"><h2>pack_robot_state()</h2><p>XPolicyLab/utils/process_data.py:119</p><pre><code> 119  def pack_robot_state(
- 120      obs: dict,
- 121      action_type: str,
- 122      robot_action_dim_info: dict,
- 123      source_type: str = &quot;obs&quot;,
- 124      state_type: str = &quot;state&quot;,
- 125  ) -&gt; np.ndarray:
- 126      &quot;&quot;&quot;
- 127      Pack robot state from obs[&#x27;state&#x27;] into one vector along the last dimension.
- 128  
- 129      Packing order:
- 130          single-arm:
- 131              [arm_0, ee_0]
- 132          dual-arm:
- 133              [arm_0, ee_0, arm_1, ee_1]
- 134      &quot;&quot;&quot;
- 135      if state_type not in obs:
- 136          raise KeyError(f&quot;Input obs must contain a &#x27;{state_type}&#x27; field.&quot;)
- 137  
- 138      state_dict = obs[state_type]
- 139  
- 140      arm_dims, ee_dims, num_arms = _validate_config(action_type, robot_action_dim_info, source_type)
- 141      arm_keys, ee_keys = _get_state_keys(action_type, num_arms, source_type)
- 142  
- 143      parts = []
- 144      expected_prefix_shape = None
- 145  
- 146      for i, (arm_key, ee_key, arm_dim, ee_dim) in enumerate(
- 147          zip(arm_keys, ee_keys, arm_dims, ee_dims)
- 148      ):
- 149          if arm_key not in state_dict:
- 150              raise KeyError(f&quot;Missing key &#x27;{arm_key}&#x27; in obs[&#x27;state&#x27;] for arm {i}.&quot;)
- 151          if ee_key not in state_dict:
- 152              raise KeyError(f&quot;Missing key &#x27;{ee_key}&#x27; in obs[&#x27;state&#x27;] for arm {i}.&quot;)
- 153  
- 154          arm_value = _ensure_valid_state_array(arm_key, state_dict[arm_key], arm_dim)
- 155          ee_value = _ensure_valid_state_array(ee_key, state_dict[ee_key], ee_dim)
- 156  
- 157          if arm_value.shape[:-1] != ee_value.shape[:-1]:
- 158              raise ValueError(
- 159                  f&quot;&#x27;{arm_key}&#x27; and &#x27;{ee_key}&#x27; must share the same prefix shape, &quot;
- 160                  f&quot;got {arm_value.shape[:-1]} and {ee_value.shape[:-1]}.&quot;
- 161              )
- 162  
- 163          if expected_prefix_shape is None:
- 164              expected_prefix_shape = arm_value.shape[:-1]
- 165          elif arm_value.shape[:-1] != expected_prefix_shape:
- 166              raise ValueError(
- 167                  &quot;All state fields must share the same prefix shape. &quot;
- 168                  f&quot;Expected {expected_prefix_shape}, got {arm_value.shape[:-1]} for &#x27;{arm_key}&#x27;.&quot;
-      … 完整函数请查看源码</code></pre></section><section id="inference"><h2>get_action_batch()</h2><p>XPolicyLab/policy/Pi_05/model.py:128</p><pre><code> 128      def get_action_batch(self, env_idx_list=None, **kwargs):
- 129          if self.observation_window is None:
- 130              raise AssertionError(&quot;update_obs or update_obs_batch first!&quot;)
- 131  
- 132          env_idx_list = env_idx_list or self._latest_env_idx_list
- 133          # actions = self.policy.infer(self.observation_window, **kwargs)[&quot;actions&quot;]
- 134          action_list = []
- 135  
- 136          for batch_index, _ in enumerate(env_idx_list):
- 137              single_observation = slice_stacked_obs(self.observation_window, batch_index)
- 138              actions = self.policy.infer(single_observation, **kwargs)[&quot;actions&quot;]
- 139              if self.robot_action_dim_info is None:
- 140                  action_list.append(actions)
- 141              else:
- 142                  action_list.append(
- 143                      unpack_robot_state(
- 144                          actions,
- 145                          self.action_type,
- 146                          self.robot_action_dim_info,
- 147                          source_type=&quot;obs&quot;,
- 148                      )
- 149                  )
- 150  
- 151          return action_list</code></pre></section><section id="unpack"><h2>unpack_robot_state()</h2><p>XPolicyLab/utils/process_data.py:176</p><pre><code> 176  def unpack_robot_state(
- 177      packed_state,
- 178      action_type: str,
- 179      robot_action_dim_info: dict,
- 180      source_type: str = &quot;obs&quot;,
- 181  ):
- 182      &quot;&quot;&quot;
- 183      Unpack packed robot state.
- 184  
- 185      Rules:
- 186          - source_type=&#x27;obs&#x27;:
- 187              * ndim must be &lt;= 2
- 188              * if ndim == 1: return dict
- 189              * if ndim == 2: return list[dict]
- 190          - source_type=&#x27;dataset&#x27;:
- 191              * return dict of arrays directly
- 192  
- 193      Unpacking order:
- 194          single-arm:
- 195              [arm_0, ee_0]
- 196          dual-arm:
- 197              [arm_0, ee_0, arm_1, ee_1]
- 198      &quot;&quot;&quot;
- 199      arm_dims, ee_dims, num_arms = _validate_config(action_type, robot_action_dim_info, source_type)
- 200      arm_keys, ee_keys = _get_state_keys(action_type, num_arms, source_type)
- 201  
- 202      packed = np.asarray(packed_state)
- 203      expected_dim = sum(arm_dims) + sum(ee_dims)
- 204  
- 205      if packed.shape[-1] != expected_dim:
- 206          raise ValueError(
- 207              f&quot;packed_state last dim mismatch: expected {expected_dim}, got {packed.shape[-1]}.&quot;
- 208          )
- 209  
- 210      if source_type == &quot;obs&quot;:
- 211          assert packed.ndim &lt;= 2, (
- 212              f&quot;When source_type=&#x27;obs&#x27;, packed_state.ndim must be &lt;= 2, got {packed.ndim}.&quot;
- 213          )
- 214  
- 215          def _unpack_single_action(single_action: np.ndarray) -&gt; dict:
- 216              result = {}
- 217              offset = 0
- 218  
- 219              for arm_key, ee_key, arm_dim, ee_dim in zip(
- 220                  arm_keys, ee_keys, arm_dims, ee_dims
- 221              ):
- 222                  result[arm_key] = single_action[offset : offset + arm_dim]
- 223                  offset += arm_dim
- 224  
- 225                  result[ee_key] = single_action[offset : offset + ee_dim]
-      … 完整函数请查看源码</code></pre></section><section id="deploy"><h2>eval_one_episode()</h2><p>XPolicyLab/policy/Pi_05/deploy.py:1</p><pre><code>   1  def eval_one_episode(TASK_ENV, model_client):
-   2  
-   3      model_client.call(func_name=&quot;reset&quot;) # reset policy
-   4  
-   5      while not TASK_ENV.is_episode_end(): # Check whether the episode ends
-   6          obs = TASK_ENV.get_obs() # Get Observation
-   7          model_client.call(func_name=&quot;update_obs&quot;, obs=obs)  # Update Observation
-   8          actions = model_client.call(func_name=&quot;get_action&quot;) # Get Action according to observation chunk
-   9  
-  10          for action_idx, action in enumerate(actions):
-  11              TASK_ENV.take_action(action)
-  12  
-  13              if TASK_ENV.is_episode_end() or action_idx + 1 == len(actions):
-  14                  break
-  15  
-  16              obs = TASK_ENV.get_obs()
-  17              model_client.call(func_name=&quot;update_obs&quot;, obs=obs)</code></pre></section><section id="takeAction"><h2>take_action_batch()</h2><p>RoboDojo/src/eval_client/eval_env.py:358</p><pre><code> 358          def take_action_batch(self, actions_list, env_idx_list=None):
- 359              if self.physx_monitor_enabled:
- 360                  self._check_physx_broken_envs()
- 361              control_info_list = []
- 362              if env_idx_list is None:
- 363                  env_idx_list = list(range(self.num_envs))
- 364              for idx, env_idx in enumerate(env_idx_list):
- 365                  action = actions_list[idx]
- 366                  self.validate_action_dict(action)
- 367                  action_type = self.get_action_type(action)
- 368                  if self.take_action_cnt[env_idx] == self.step_lim or self.end_flag[env_idx]:
- 369                      continue
- 370  
- 371                  self.take_action_cnt[env_idx] += 1
- 372                  print(
- 373                      f&quot;env{env_idx} step: \033[92m{self.take_action_cnt[env_idx]} / {self.step_lim}\033[0m&quot;,
- 374                      end=&quot;\r&quot;,
- 375                  )
- 376                  control_info = dict()
- 377                  if action_type == &quot;joint&quot;:
- 378                      for robot in self.robot_manager.robot_list:
- 379                          if robot.type != &quot;target&quot;:
- 380                              continue
- 381                          key_name = self.robot_manager.process_name(robot.arm_name)
- 382                          control_info[key_name] = {
- 383                              &quot;position&quot;: action[key_name],
- 384                          }
- 385  
- 386                          key_name = self.robot_manager.process_name(robot.gripper_name)
- 387                          if robot.ee_type == &quot;gripper&quot;:
- 388                              val = deepcopy(action[key_name][0])
- 389                              val = np.clip(val, 0, 1)
- 390                              if robot.gripper_move[&quot;sign&quot;] == 1:
- 391                                  val = val * (robot.gripper_scale[1] - robot.gripper_scale[0]) + robot.gripper_scale[0]
- 392                              else:
- 393                                  val = (1 - val) * (
- 394                                      robot.gripper_scale[1] - robot.gripper_scale[0]
- 395                                  ) + robot.gripper_scale[0]
- 396                              vals = [
- 397                                  val,
- 398                                  val * robot.gripper_move[&quot;mimic&quot;][1] + robot.gripper_move[&quot;mimic&quot;][2],
- 399                              ]
- 400                              control_info[key_name] = {&quot;position&quot;: vals}
- 401                          elif robot.ee_type == &quot;hand&quot;:
- 402                              control_info[key_name] = {
- 403                                  &quot;position&quot;: action[key_name],
- 404                              }
- 405                          else:
- 406                              pass
- 407                  elif action_type == &quot;ee&quot;:
-      … 完整函数请查看源码</code></pre></section><section id="score"><h2>get_score()</h2><p>RoboDojo/task/RoboDojo/tasks/stack_blocks.py:44</p><pre><code>  44      def get_score(self):
-  45          rm = self.reward_manager
-  46          xy_threshold_list = self._stacked_xy_thresholds()
-  47          rm.score(
-  48              [
-  49                  [
-  50                      rm.is_all_gripper_open(open_threshold=0.8),
-  51                      [
-  52                          rm.is_stacked(label_list=[&quot;block_0&quot;, &quot;block_1&quot;], xy_threshold=xy_threshold_list),
-  53                          rm.is_stacked(label_list=[&quot;block_1&quot;, &quot;block_2&quot;], xy_threshold=xy_threshold_list),
-  54                          rm.is_stacked(label_list=[&quot;block_0&quot;, &quot;block_2&quot;], xy_threshold=xy_threshold_list),
-  55                      ],
-  56                  ],
-  57                  [
-  58                      rm.is_all_gripper_open(open_threshold=0.8),
-  59                      rm.is_stacked(label_list=[&quot;block_0&quot;, &quot;block_1&quot;, &quot;block_2&quot;], xy_threshold=xy_threshold_list),
-  60                  ],
-  61              ],
-  62              [15, 100],
-  63              score_mode=&quot;transition&quot;,
-  64          )</code></pre></section><section id="reward"><h2>_score_for_state()</h2><p>RoboDojo/env/reward_manager/reward_manager.py:589</p><pre><code> 589      def _score_for_state(
- 590          self,
- 591          env_idx: int,
- 592          reward_val: float,
- 593          score_meta: List[dict],
- 594          score_achieved: List[list],
- 595          score_completed_count: List[int],
- 596      ) -&gt; float:
- 597          meta = score_meta[env_idx]
- 598          if meta[&quot;mode&quot;] is None:
- 599              return 0.0
- 600  
- 601          gradient = meta[&quot;gradient&quot;]
- 602          if not gradient:
- 603              return 0.0
- 604  
- 605          success = reward_val &gt; 1 - 1e-3
- 606  
- 607          if meta[&quot;mode&quot;] == &quot;paired&quot;:
- 608              achieved = score_achieved[env_idx]
- 609              if not achieved:
- 610                  return 0.0
- 611              if success:
- 612                  return float(sum(achieved))
- 613              else:
- 614                  if float(sum(achieved)) != 100:
- 615                      return float(sum(achieved))
- 616                  else:
- 617                      return float(sum(achieved[:-1]))
- 618  
- 619          n = score_completed_count[env_idx]
- 620          if n == 0:
- 621              return 0.0
- 622          n = min(n, len(gradient))
- 623          score_idx = max(n - 1, 0)
- 624          current_score = float(gradient[score_idx])
- 625  
- 626          if success:
- 627              return current_score
- 628          if current_score != 100:
- 629              return current_score
- 630          if score_idx == 0:
- 631              return 0.0
- 632          return float(gradient[score_idx - 1])</code></pre></section><section id="runEval"><h2>run_eval()</h2><p>RoboDojo/src/eval_client/eval_env.py:771</p><pre><code> 771          def run_eval(self):
- 772              self.run_reward()
- 773              if hasattr(self, &quot;get_score&quot;):
- 774                  self.get_score()
- 775              exist_envs = self.get_running_env_idx_list()
- 776              if getattr(self, &quot;interact&quot;, False):
- 777                  if hasattr(self, &quot;query_support_arm_traj&quot;):
- 778                      for env_idx in exist_envs:
- 779                          self.query_support_arm_traj(env_idx=env_idx)
- 780              if self.eval_batch:
- 781                  self.eval_one_episode_batch()
- 782              else:
- 783                  self.eval_one_episode()
- 784              success = 0
- 785              process_scores = self.reward_manager.get_score() if hasattr(self, &quot;get_score&quot;) else None
- 786              # Envs flagged unstable during the episode (e.g. make_kong&#x27;s
- 787              # support-arm discard failed to knock the target tile down) are not
- 788              # valid eval samples: skip their videos and exclude them from the
- 789              # eval total, accounting them under unstable_nums instead.
- 790              unstable_in_batch = [e for e in exist_envs if e in self.unstable_envs]
- 791              if unstable_in_batch:
- 792                  self.unstable_nums += len(unstable_in_batch)
- 793                  self.episode_nums -= len(unstable_in_batch)
- 794              eval_envs = [e for e in exist_envs if e not in self.unstable_envs]
- 795              for idx, env_idx in enumerate(eval_envs):
- 796                  index = idx + self.success_nums + self.fail_nums
- 797                  episode_score = 0.0
- 798                  tag = &quot;fail&quot;
- 799                  if self.success[env_idx]:
- 800                      self.total_score += 1.0
- 801                      episode_score = 1.0
- 802                      success += 1
- 803                      tag = &quot;success&quot;
- 804                  elif process_scores is not None:
- 805                      episode_score = process_scores[env_idx] / 100.0
- 806                      self.total_score += episode_score
- 807  
- 808                  # seed_list was filtered by completed/abandoned ids on resume,
- 809                  # so seed_list.index(seed) no longer yields the original
- 810                  # layout id. Since init_eval populates seed_list as
- 811                  # range(N_layouts), seed == layout_id by construction; use
- 812                  # env_seeds[env_idx] directly.
- 813                  self.eval_result[&quot;details&quot;][index] = {
- 814                      &quot;layout_id&quot;: int(self.env_seeds[env_idx]),
- 815                      &quot;success&quot;: bool(self.success[env_idx]),
- 816                      &quot;score&quot;: episode_score,
- 817                  }
- 818                  video_path = os.path.join(self.save_dir, f&quot;episode_{index:07d}.mp4&quot;)
- 819                  self.save_video(env_idx, video_path, tag)
- 820  
-      … 完整函数请查看源码</code></pre></section><section id="displacement"><h2>move_by_displacement()</h2><p>RoboTwin/envs/_base_task.py:1458</p><pre><code>1458      def move_by_displacement(
-1459          self,
-1460          arm_tag: ArmTag,
-1461          x: float = 0.0,
-1462          y: float = 0.0,
-1463          z: float = 0.0,
-1464          quat: list = None,
-1465          move_axis: Literal[&quot;world&quot;, &quot;arm&quot;] = &quot;world&quot;,
-1466      ):
-1467          if arm_tag == &quot;left&quot;:
-1468              origin_pose = np.array(self.robot.get_left_ee_pose(), dtype=np.float64)
-1469          elif arm_tag == &quot;right&quot;:
-1470              origin_pose = np.array(self.robot.get_right_ee_pose(), dtype=np.float64)
-1471          else:
-1472              raise ValueError(f&#x27;arm_tag must be either &quot;left&quot; or &quot;right&quot;, not {arm_tag}&#x27;)
-1473          displacement = np.zeros(7, dtype=np.float64)
-1474          if move_axis == &quot;world&quot;:
-1475              displacement[:3] = np.array([x, y, z], dtype=np.float64)
-1476          else:
-1477              dir_vec = transforms._toPose(origin_pose).to_transformation_matrix()[:3, 0]
-1478              dir_vec /= np.linalg.norm(dir_vec)
-1479              displacement[:3] = -z * dir_vec
-1480          origin_pose += displacement
-1481          if quat is not None:
-1482              origin_pose[3:] = quat
-1483          return arm_tag, [Action(arm_tag, &quot;move&quot;, target_pose=origin_pose)]
-1484  </code></pre></section><section id="move"><h2>move()</h2><p>RoboTwin/envs/_base_task.py:969</p><pre><code> 969      def move(
- 970          self,
- 971          actions_by_arm1: tuple[ArmTag, list[Action]],
- 972          actions_by_arm2: tuple[ArmTag, list[Action]] = None,
- 973          save_freq=-1,
- 974      ):
- 975          &quot;&quot;&quot;
- 976          Take action for the robot.
- 977          &quot;&quot;&quot;
- 978  
- 979          def get_actions(actions, arm_tag: ArmTag) -&gt; list[Action]:
- 980              # SUBNOTE arm_tag, List[Action] -&gt; List[Action]
- 981              if actions[1] is None:
- 982                  if actions[0][0] == arm_tag:
- 983                      return actions[0][1]
- 984                  else:
- 985                      return []
- 986              else:
- 987                  if actions[0][0] == actions[0][1]:
- 988                      raise ValueError(&quot;&quot;)
- 989                  if actions[0][0] == arm_tag:
- 990                      return actions[0][1]
- 991                  else:
- 992                      return actions[1][1]
- 993  
- 994          if self.plan_success is False:
- 995              return False
- 996  
- 997          actions = [actions_by_arm1, actions_by_arm2]
- 998          left_actions = get_actions(actions, &quot;left&quot;)
- 999          right_actions = get_actions(actions, &quot;right&quot;)
-1000  
-1001          # SUBNOTE 将左臂序列长度和右臂序列长度填充成一样的
-1002          max_len = max(len(left_actions), len(right_actions))
-1003          left_actions += [None] * (max_len - len(left_actions))
-1004          right_actions += [None] * (max_len - len(right_actions))
-1005  
-1006          for left, right in zip(left_actions, right_actions):
-1007  
-1008              if (left is not None and left.arm_tag != &quot;left&quot;) or (right is not None
-1009                                                                   and right.arm_tag != &quot;right&quot;):  # check
-1010                  raise ValueError(f&quot;Invalid arm tag: {left.arm_tag} or {right.arm_tag}. Must be &#x27;left&#x27; or &#x27;right&#x27;.&quot;)
-1011  
-1012              if (left is not None and left.action == &quot;move&quot;) and (right is not None
-1013                                                                   and right.action == &quot;move&quot;):  # together move
-1014                  # NOTE 1.1 [func : : together_move_to_pose] skip-together_move_to_pose 分支 1
-1015                  self.together_move_to_pose(  # TODO
-1016                      left_target_pose=left.target_pose,
-1017                      right_target_pose=right.target_pose,
-1018                      left_constraint_pose=left.args.get(&quot;constraint_pose&quot;),
-      … 完整函数请查看源码</code></pre></section><section id="retime"><h2>retime_trajectory()</h2><p>third_party/curobo_robotwin/src/curobo/wrap/reacher/motion_gen.py:1312</p><pre><code>1312      def retime_trajectory(
-1313          self,
-1314          time_dilation_factor: float,
-1315          interpolate_trajectory: bool = True,
-1316          interpolation_dt: Optional[float] = None,
-1317          interpolation_kind: InterpolateType = InterpolateType.LINEAR_CUDA,
-1318          create_interpolation_buffer: bool = True,
-1319      ):
-1320          &quot;&quot;&quot;Retime the optimized trajectory by a dilation factor.
-1321  
-1322          Args:
-1323              time_dilation_factor: Time factor to slow down the trajectory. Should be less than 1.0.
-1324              interpolate_trajectory: Interpolate the trajectory after retiming.
-1325              interpolation_dt: Time between steps in the interpolated trajectory. If None,
-1326                  :attr:`MotionGenResult.interpolation_dt` is used.
-1327              interpolation_kind: Interpolation type to use.
-1328              create_interpolation_buffer: Create a new buffer for interpolated trajectory. Set this
-1329                  to True if existing buffer is not large enough to store new trajectory.
-1330          &quot;&quot;&quot;
-1331  
-1332          if time_dilation_factor &gt; 1.0:
-1333              log_error(&quot;time_dilation_factor should be less than 1.0&quot;)
-1334          if time_dilation_factor == 1.0:
-1335              return
-1336          if len(self.path_buffer_last_tstep) &gt; 1:
-1337              log_error(&quot;only single result is supported&quot;)
-1338  
-1339          new_dt = self.optimized_dt * (1.0 / time_dilation_factor)
-1340          if len(self.optimized_plan.shape) == 3:
-1341              new_dt = new_dt.view(-1, 1, 1)
-1342          else:
-1343              new_dt = new_dt.view(-1, 1)
-1344          self.optimized_plan = self.optimized_plan.scale_by_dt(self.optimized_dt, new_dt)
-1345          self.optimized_dt = new_dt.view(-1)
-1346          if interpolate_trajectory:
-1347              if interpolation_dt is not None:
-1348                  self.interpolation_dt = interpolation_dt
-1349              self.interpolated_plan, last_tstep, _ = get_batch_interpolated_trajectory(
-1350                  self.optimized_plan,
-1351                  self.optimized_dt,
-1352                  self.interpolation_dt,
-1353                  kind=interpolation_kind,
-1354                  out_traj_state=self.interpolated_plan if not create_interpolation_buffer else None,
-1355                  tensor_args=self.interpolated_plan.tensor_args,
-1356                  optimize_dt=False,
-1357              )
-1358              self.path_buffer_last_tstep = [last_tstep[i] for i in range(len(last_tstep))]
-1359              if len(self.optimized_plan.shape) == 2:
-1360                  self.interpolated_plan = self.interpolated_plan.squeeze(0)</code></pre></section><section id="grippers"><h2>plan_grippers()</h2><p>RoboTwin/envs/robot/planner.py:256</p><pre><code> 256          def plan_grippers(self, now_val, target_val):
- 257              num_step = 200
- 258              dis_val = target_val - now_val
- 259              step = dis_val / num_step
- 260              res = {}
- 261              vals = np.linspace(now_val, target_val, num_step)
- 262              res[&quot;num_step&quot;] = num_step
- 263              res[&quot;per_step&quot;] = step
- 264              res[&quot;result&quot;] = vals
- 265              return res</code></pre></section><section id="policySeed"><h2>set_policy_seed()</h2><p>XPolicyLab/policy/Pi_05/model.py:153</p><pre><code> 153      def set_policy_seed(self, seed):
- 154          &quot;&quot;&quot;Opt-in RNG reset for a dedicated, serial evaluation server.
- 155  
- 156          This controls sampling, not checkpoint selection. It is process-wide for
- 157          PyTorch and does not provide independent RNG streams for batched envs.
- 158          Subsequent reset() calls reapply the chosen seed.
- 159          &quot;&quot;&quot;
- 160          if isinstance(seed, bool) or not isinstance(seed, int) or not 0 &lt;= seed &lt; 2**32:
- 161              raise ValueError(&quot;policy_seed must be an integer in [0, 2**32)&quot;)
- 162          self._policy_seed = seed
- 163          self.reset()
- 164          return {&quot;policy_seed&quot;: seed, &quot;backend&quot;: self._policy_seed_backend, &quot;scope&quot;: &quot;serial_server&quot;}</code></pre></section><section id="reset"><h2>reset()</h2><p>XPolicyLab/policy/Pi_05/model.py:166</p><pre><code> 166      def reset(self):
- 167          if hasattr(self, &quot;_policy_seed&quot;):
- 168              if self.policy._is_pytorch_model:
- 169                  import torch
- 170                  torch.manual_seed(self._policy_seed)
- 171                  if torch.cuda.is_available():
- 172                      torch.cuda.manual_seed_all(self._policy_seed)
- 173                  self._policy_seed_backend = &quot;pytorch&quot;
- 174              else:
- 175                  import jax
- 176                  self.policy._rng = jax.random.key(self._policy_seed)
- 177                  self._policy_seed_backend = &quot;jax&quot;
- 178          self.observation_window = None
- 179          self._latest_env_idx_list = [0]</code></pre></section><section id="nativeInfer"><h2>infer()</h2><p>XPolicyLab/policy/Pi_05/openpi/src/openpi/policies/policy.py:68</p><pre><code>  68      def infer(self, obs: dict, *, noise: np.ndarray | None = None) -&gt; dict:  # type: ignore[misc]
-  69          # Make a copy since transformations may modify the inputs in place.
-  70          inputs = jax.tree.map(lambda x: x, obs)
-  71          inputs = self._input_transform(inputs)
-  72  
-  73          is_batched = False
-  74          if &quot;state&quot; in inputs:
-  75              is_batched = np.asarray(inputs[&quot;state&quot;]).ndim &gt; 1
-  76          elif &quot;image&quot; in inputs and inputs[&quot;image&quot;]:
-  77              first_image = next(iter(inputs[&quot;image&quot;].values()))
-  78              is_batched = np.asarray(first_image).ndim &gt; 3
-  79  
-  80          if not self._is_pytorch_model:
-  81              if not is_batched:
-  82                  inputs = jax.tree.map(lambda x: jnp.asarray(x)[np.newaxis, ...], inputs)
-  83              else:
-  84                  inputs = jax.tree.map(jnp.asarray, inputs)
-  85              self._rng, sample_rng_or_pytorch_device = jax.random.split(self._rng)
-  86          else:
-  87              # Convert inputs to PyTorch tensors and move to correct device
-  88              if not is_batched:
-  89                  inputs = jax.tree.map(
-  90                      lambda x: torch.from_numpy(np.array(x)).to(self._pytorch_device)[None, ...], inputs
-  91                  )
-  92              else:
-  93                  inputs = jax.tree.map(lambda x: torch.from_numpy(np.array(x)).to(self._pytorch_device), inputs)
-  94              sample_rng_or_pytorch_device = self._pytorch_device
-  95  
-  96          # Prepare kwargs for sample_actions
-  97          sample_kwargs = dict(self._sample_kwargs)
-  98          if noise is not None:
-  99              noise = torch.from_numpy(noise).to(self._pytorch_device) if self._is_pytorch_model else jnp.asarray(noise)
- 100  
- 101              if not is_batched and noise.ndim == 2:
- 102                  noise = noise[None, ...]
- 103              sample_kwargs[&quot;noise&quot;] = noise
- 104  
- 105          observation = _model.Observation.from_dict(inputs)
- 106          start_time = time.monotonic()
- 107          outputs = {
- 108              &quot;state&quot;: inputs[&quot;state&quot;],
- 109              &quot;actions&quot;: self._sample_actions(sample_rng_or_pytorch_device, observation, **sample_kwargs),
- 110          }
- 111          model_time = time.monotonic() - start_time
- 112          if self._is_pytorch_model:
- 113              if not is_batched:
- 114                  outputs = jax.tree.map(lambda x: np.asarray(x[0, ...].detach().cpu()), outputs)
- 115              else:
- 116                  outputs = jax.tree.map(lambda x: np.asarray(x.detach().cpu()), outputs)
- 117          else:
-      … 完整函数请查看源码</code></pre></section><section id="obs"><h2>get_obs()</h2><p>RoboTwin/envs/_base_task.py:438</p><pre><code> 438      def get_obs(self):
- 439          self._update_render()
- 440          self.cameras.update_picture()
- 441          pkl_dic = {
- 442              &quot;observation&quot;: {},
- 443              &quot;pointcloud&quot;: [],
- 444              &quot;joint_action&quot;: {},
- 445              &quot;endpose&quot;: {},
- 446          }
- 447  
- 448          pkl_dic[&quot;observation&quot;] = self.cameras.get_config()
- 449          # rgb
- 450          if self.data_type.get(&quot;rgb&quot;, False):
- 451              rgb = self.cameras.get_rgb()
- 452              for camera_name in rgb.keys():
- 453                  pkl_dic[&quot;observation&quot;][camera_name].update(rgb[camera_name])
- 454  
- 455          if self.data_type.get(&quot;third_view&quot;, False):
- 456              third_view_rgb = self.cameras.get_observer_rgb()
- 457              pkl_dic[&quot;third_view_rgb&quot;] = third_view_rgb
- 458          # mesh_segmentation
- 459          if self.data_type.get(&quot;mesh_segmentation&quot;, False):
- 460              mesh_segmentation = self.cameras.get_segmentation(level=&quot;mesh&quot;)
- 461              for camera_name in mesh_segmentation.keys():
- 462                  pkl_dic[&quot;observation&quot;][camera_name].update(mesh_segmentation[camera_name])
- 463          # actor_segmentation
- 464          if self.data_type.get(&quot;actor_segmentation&quot;, False):
- 465              actor_segmentation = self.cameras.get_segmentation(level=&quot;actor&quot;)
- 466              for camera_name in actor_segmentation.keys():
- 467                  pkl_dic[&quot;observation&quot;][camera_name].update(actor_segmentation[camera_name])
- 468          # depth
- 469          if self.data_type.get(&quot;depth&quot;, False):
- 470              depth = self.cameras.get_depth()
- 471              for camera_name in depth.keys():
- 472                  pkl_dic[&quot;observation&quot;][camera_name].update(depth[camera_name])
- 473          # endpose
- 474          if self.data_type.get(&quot;endpose&quot;, False):
- 475              norm_gripper_val = [
- 476                  self.robot.get_left_gripper_val(),
- 477                  self.robot.get_right_gripper_val(),
- 478              ]
- 479              left_endpose = self.get_arm_pose(&quot;left&quot;)
- 480              right_endpose = self.get_arm_pose(&quot;right&quot;)
- 481              pkl_dic[&quot;endpose&quot;][&quot;left_endpose&quot;] = left_endpose
- 482              pkl_dic[&quot;endpose&quot;][&quot;left_gripper&quot;] = norm_gripper_val[0]
- 483              pkl_dic[&quot;endpose&quot;][&quot;right_endpose&quot;] = right_endpose
- 484              pkl_dic[&quot;endpose&quot;][&quot;right_gripper&quot;] = norm_gripper_val[1]
- 485          # qpos
- 486          if self.data_type.get(&quot;qpos&quot;, False):
- 487  
-      … 完整函数请查看源码</code></pre></section></main></html>
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>官方代码引用</title><link rel="stylesheet" href="style.css"><style>main{max-width:1100px;margin:auto;padding:32px}section{padding:24px 0;border-bottom:1px solid #ddd}pre{overflow:auto;font-family:Consolas,monospace;font-size:15px}section:target{background:#edf2eb}</style><main><a href="index.html">返回整体流程</a><h1>官方代码引用</h1><p>引用固定的官方提交；实验结果来自本地运行，不是官方榜单成绩。</p><section id="dojoReset"><a target="_blank" rel="noopener" href="https://github.com/RoboDojo-Benchmark/RoboDojo/blob/09bd5f5e762b949f5858ece31347ce62057b3a5e/src/eval_client/eval_env.py#L208">查看官方代码 ↗</a><h2>reset()</h2><p>RoboDojo/src/eval_client/eval_env.py:208</p><pre><code>官方代码引用（固定提交）
+
+RoboDojo/src/eval_client/eval_env.py
+reset()
+提交：09bd5f5e762b949f5858ece31347ce62057b3a5e
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="dojoSetup"><a target="_blank" rel="noopener" href="https://github.com/RoboDojo-Benchmark/RoboDojo/blob/09bd5f5e762b949f5858ece31347ce62057b3a5e/src/eval_client/eval_env.py#L247">查看官方代码 ↗</a><h2>setup_scene()</h2><p>RoboDojo/src/eval_client/eval_env.py:247</p><pre><code>官方代码引用（固定提交）
+
+RoboDojo/src/eval_client/eval_env.py
+setup_scene()
+提交：09bd5f5e762b949f5858ece31347ce62057b3a5e
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="loadLayout"><a target="_blank" rel="noopener" href="https://github.com/RoboDojo-Benchmark/RoboDojo/blob/09bd5f5e762b949f5858ece31347ce62057b3a5e/env/scene_manager/layout_manager.py#L151">查看官方代码 ↗</a><h2>load_saved_layout()</h2><p>RoboDojo/env/scene_manager/layout_manager.py:151</p><pre><code>官方代码引用（固定提交）
+
+RoboDojo/env/scene_manager/layout_manager.py
+load_saved_layout()
+提交：09bd5f5e762b949f5858ece31347ce62057b3a5e
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="savedPoses"><a target="_blank" rel="noopener" href="https://github.com/RoboDojo-Benchmark/RoboDojo/blob/09bd5f5e762b949f5858ece31347ce62057b3a5e/env/scene_manager/scene_manager.py#L194">查看官方代码 ↗</a><h2>apply_saved_poses()</h2><p>RoboDojo/env/scene_manager/scene_manager.py:194</p><pre><code>官方代码引用（固定提交）
+
+RoboDojo/env/scene_manager/scene_manager.py
+apply_saved_poses()
+提交：09bd5f5e762b949f5858ece31347ce62057b3a5e
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="dojoTrial"><a target="_blank" rel="noopener" href="https://github.com/RoboDojo-Benchmark/RoboDojo/blob/09bd5f5e762b949f5858ece31347ce62057b3a5e/src/eval_client/main.py#L254">查看官方代码 ↗</a><h2>main()</h2><p>RoboDojo/src/eval_client/main.py:254</p><pre><code>官方代码引用（固定提交）
+
+RoboDojo/src/eval_client/main.py
+main()
+提交：09bd5f5e762b949f5858ece31347ce62057b3a5e
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="dojoObsInit"><a target="_blank" rel="noopener" href="https://github.com/RoboDojo-Benchmark/RoboDojo/blob/09bd5f5e762b949f5858ece31347ce62057b3a5e/env/observation_manager/obs_manager.py#L16">查看官方代码 ↗</a><h2>__init__()</h2><p>RoboDojo/env/observation_manager/obs_manager.py:16</p><pre><code>官方代码引用（固定提交）
+
+RoboDojo/env/observation_manager/obs_manager.py
+__init__()
+提交：09bd5f5e762b949f5858ece31347ce62057b3a5e
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="dojoControl"><a target="_blank" rel="noopener" href="https://github.com/RoboDojo-Benchmark/RoboDojo/blob/09bd5f5e762b949f5858ece31347ce62057b3a5e/src/eval_client/eval_env.py#L475">查看官方代码 ↗</a><h2>process_control_info()</h2><p>RoboDojo/src/eval_client/eval_env.py:475</p><pre><code>官方代码引用（固定提交）
+
+RoboDojo/src/eval_client/eval_env.py
+process_control_info()
+提交：09bd5f5e762b949f5858ece31347ce62057b3a5e
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="dojoBackground"><a target="_blank" rel="noopener" href="https://github.com/RoboDojo-Benchmark/RoboDojo/blob/09bd5f5e762b949f5858ece31347ce62057b3a5e/env/scene_manager/layout_manager.py#L222">查看官方代码 ↗</a><h2>select_background()</h2><p>RoboDojo/env/scene_manager/layout_manager.py:222</p><pre><code>官方代码引用（固定提交）
+
+RoboDojo/env/scene_manager/layout_manager.py
+select_background()
+提交：09bd5f5e762b949f5858ece31347ce62057b3a5e
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="dojoLight"><a target="_blank" rel="noopener" href="https://github.com/RoboDojo-Benchmark/RoboDojo/blob/09bd5f5e762b949f5858ece31347ce62057b3a5e/env/scene_manager/layout_manager.py#L286">查看官方代码 ↗</a><h2>select_light()</h2><p>RoboDojo/env/scene_manager/layout_manager.py:286</p><pre><code>官方代码引用（固定提交）
+
+RoboDojo/env/scene_manager/layout_manager.py
+select_light()
+提交：09bd5f5e762b949f5858ece31347ce62057b3a5e
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="dojoSeed"><a target="_blank" rel="noopener" href="https://github.com/RoboDojo-Benchmark/RoboDojo/blob/09bd5f5e762b949f5858ece31347ce62057b3a5e/env/seeding.py#L37">查看官方代码 ↗</a><h2>seed_everywhere()</h2><p>RoboDojo/env/seeding.py:37</p><pre><code>官方代码引用（固定提交）
+
+RoboDojo/env/seeding.py
+seed_everywhere()
+提交：09bd5f5e762b949f5858ece31347ce62057b3a5e
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="randPose"><a target="_blank" rel="noopener" href="https://github.com/RoboTwin-Platform/RoboTwin/blob/ea8b21121ebb3cd201ff5b3fe361944ac94eda3f/envs/utils/rand_create_actor.py#L8">查看官方代码 ↗</a><h2>rand_pose()</h2><p>RoboTwin/envs/utils/rand_create_actor.py:8</p><pre><code>官方代码引用（固定提交）
+
+RoboTwin/envs/utils/rand_create_actor.py
+rand_pose()
+提交：ea8b21121ebb3cd201ff5b3fe361944ac94eda3f
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="policyNoise"><a target="_blank" rel="noopener" href="https://github.com/XPolicyLab/XPolicyLab/blob/34d6135d609d46a10ccb81da24d5ddad0b4c1f7a/policy/Pi_05/openpi/src/openpi/models_pytorch/pi0_pytorch.py#L173">查看官方代码 ↗</a><h2>sample_noise()</h2><p>XPolicyLab/policy/Pi_05/openpi/src/openpi/models_pytorch/pi0_pytorch.py:173</p><pre><code>官方代码引用（固定提交）
+
+XPolicyLab/policy/Pi_05/openpi/src/openpi/models_pytorch/pi0_pytorch.py
+sample_noise()
+提交：34d6135d609d46a10ccb81da24d5ddad0b4c1f7a
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="policyInit"><a target="_blank" rel="noopener" href="https://github.com/XPolicyLab/XPolicyLab/blob/34d6135d609d46a10ccb81da24d5ddad0b4c1f7a/policy/Pi_05/openpi/src/openpi/policies/policy.py#L25">查看官方代码 ↗</a><h2>__init__()</h2><p>XPolicyLab/policy/Pi_05/openpi/src/openpi/policies/policy.py:25</p><pre><code>官方代码引用（固定提交）
+
+XPolicyLab/policy/Pi_05/openpi/src/openpi/policies/policy.py
+__init__()
+提交：34d6135d609d46a10ccb81da24d5ddad0b4c1f7a
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="setup"><a target="_blank" rel="noopener" href="https://github.com/RoboTwin-Platform/RoboTwin/blob/ea8b21121ebb3cd201ff5b3fe361944ac94eda3f/envs/_base_task.py#L43">查看官方代码 ↗</a><h2>_init_task_env_()</h2><p>RoboTwin/envs/_base_task.py:43</p><pre><code>官方代码引用（固定提交）
+
+RoboTwin/envs/_base_task.py
+_init_task_env_()
+提交：ea8b21121ebb3cd201ff5b3fe361944ac94eda3f
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="actors"><a target="_blank" rel="noopener" href="https://github.com/RoboTwin-Platform/RoboTwin/blob/ea8b21121ebb3cd201ff5b3fe361944ac94eda3f/envs/stack_blocks_two.py#L12">查看官方代码 ↗</a><h2>load_actors()</h2><p>RoboTwin/envs/stack_blocks_two.py:12</p><pre><code>官方代码引用（固定提交）
+
+RoboTwin/envs/stack_blocks_two.py
+load_actors()
+提交：ea8b21121ebb3cd201ff5b3fe361944ac94eda3f
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="play"><a target="_blank" rel="noopener" href="https://github.com/RoboTwin-Platform/RoboTwin/blob/ea8b21121ebb3cd201ff5b3fe361944ac94eda3f/envs/stack_blocks_two.py#L62">查看官方代码 ↗</a><h2>play_once()</h2><p>RoboTwin/envs/stack_blocks_two.py:62</p><pre><code>官方代码引用（固定提交）
+
+RoboTwin/envs/stack_blocks_two.py
+play_once()
+提交：ea8b21121ebb3cd201ff5b3fe361944ac94eda3f
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="pick"><a target="_blank" rel="noopener" href="https://github.com/RoboTwin-Platform/RoboTwin/blob/ea8b21121ebb3cd201ff5b3fe361944ac94eda3f/envs/stack_blocks_two.py#L81">查看官方代码 ↗</a><h2>pick_and_place_block()</h2><p>RoboTwin/envs/stack_blocks_two.py:81</p><pre><code>官方代码引用（固定提交）
+
+RoboTwin/envs/stack_blocks_two.py
+pick_and_place_block()
+提交：ea8b21121ebb3cd201ff5b3fe361944ac94eda3f
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="grasp"><a target="_blank" rel="noopener" href="https://github.com/RoboTwin-Platform/RoboTwin/blob/ea8b21121ebb3cd201ff5b3fe361944ac94eda3f/envs/_base_task.py#L1240">查看官方代码 ↗</a><h2>grasp_actor()</h2><p>RoboTwin/envs/_base_task.py:1240</p><pre><code>官方代码引用（固定提交）
+
+RoboTwin/envs/_base_task.py
+grasp_actor()
+提交：ea8b21121ebb3cd201ff5b3fe361944ac94eda3f
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="choose"><a target="_blank" rel="noopener" href="https://github.com/RoboTwin-Platform/RoboTwin/blob/ea8b21121ebb3cd201ff5b3fe361944ac94eda3f/envs/_base_task.py#L1153">查看官方代码 ↗</a><h2>choose_grasp_pose()</h2><p>RoboTwin/envs/_base_task.py:1153</p><pre><code>官方代码引用（固定提交）
+
+RoboTwin/envs/_base_task.py
+choose_grasp_pose()
+提交：ea8b21121ebb3cd201ff5b3fe361944ac94eda3f
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="transformPlace"><a target="_blank" rel="noopener" href="https://github.com/RoboTwin-Platform/RoboTwin/blob/ea8b21121ebb3cd201ff5b3fe361944ac94eda3f/envs/utils/transforms.py#L450">查看官方代码 ↗</a><h2>get_place_pose()</h2><p>RoboTwin/envs/utils/transforms.py:450</p><pre><code>官方代码引用（固定提交）
+
+RoboTwin/envs/utils/transforms.py
+get_place_pose()
+提交：ea8b21121ebb3cd201ff5b3fe361944ac94eda3f
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="basePlace"><a target="_blank" rel="noopener" href="https://github.com/RoboTwin-Platform/RoboTwin/blob/ea8b21121ebb3cd201ff5b3fe361944ac94eda3f/envs/_base_task.py#L1293">查看官方代码 ↗</a><h2>get_place_pose()</h2><p>RoboTwin/envs/_base_task.py:1293</p><pre><code>官方代码引用（固定提交）
+
+RoboTwin/envs/_base_task.py
+get_place_pose()
+提交：ea8b21121ebb3cd201ff5b3fe361944ac94eda3f
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="planner"><a target="_blank" rel="noopener" href="https://github.com/RoboTwin-Platform/RoboTwin/blob/ea8b21121ebb3cd201ff5b3fe361944ac94eda3f/envs/robot/planner.py#L93">查看官方代码 ↗</a><h2>plan_path()</h2><p>RoboTwin/envs/robot/planner.py:93</p><pre><code>官方代码引用（固定提交）
+
+RoboTwin/envs/robot/planner.py
+plan_path()
+提交：ea8b21121ebb3cd201ff5b3fe361944ac94eda3f
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="dense"><a target="_blank" rel="noopener" href="https://github.com/RoboTwin-Platform/RoboTwin/blob/ea8b21121ebb3cd201ff5b3fe361944ac94eda3f/envs/_base_task.py#L1480">查看官方代码 ↗</a><h2>take_dense_action()</h2><p>RoboTwin/envs/_base_task.py:1480</p><pre><code>官方代码引用（固定提交）
+
+RoboTwin/envs/_base_task.py
+take_dense_action()
+提交：ea8b21121ebb3cd201ff5b3fe361944ac94eda3f
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="collect"><a target="_blank" rel="noopener" href="https://github.com/RoboTwin-Platform/RoboTwin/blob/ea8b21121ebb3cd201ff5b3fe361944ac94eda3f/scripts/collect_data.py#L153">查看官方代码 ↗</a><h2>run()</h2><p>RoboTwin/scripts/collect_data.py:153</p><pre><code>官方代码引用（固定提交）
+
+RoboTwin/scripts/collect_data.py
+run()
+提交：ea8b21121ebb3cd201ff5b3fe361944ac94eda3f
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="hdf5"><a target="_blank" rel="noopener" href="https://github.com/RoboTwin-Platform/RoboTwin/blob/ea8b21121ebb3cd201ff5b3fe361944ac94eda3f/envs/utils/pkl2hdf5.py#L79">查看官方代码 ↗</a><h2>create_xpolicylab_hdf5()</h2><p>RoboTwin/envs/utils/pkl2hdf5.py:79</p><pre><code>官方代码引用（固定提交）
+
+RoboTwin/envs/utils/pkl2hdf5.py
+create_xpolicylab_hdf5()
+提交：ea8b21121ebb3cd201ff5b3fe361944ac94eda3f
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="seeds"><a target="_blank" rel="noopener" href="https://github.com/RoboDojo-Benchmark/RoboDojo/blob/09bd5f5e762b949f5858ece31347ce62057b3a5e/env/seed_manager/seed_manager.py#L27">查看官方代码 ↗</a><h2>init_eval()</h2><p>RoboDojo/env/seed_manager/seed_manager.py:27</p><pre><code>官方代码引用（固定提交）
+
+RoboDojo/env/seed_manager/seed_manager.py
+init_eval()
+提交：09bd5f5e762b949f5858ece31347ce62057b3a5e
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="layout"><a target="_blank" rel="noopener" href="https://github.com/RoboDojo-Benchmark/RoboDojo/blob/09bd5f5e762b949f5858ece31347ce62057b3a5e/env/scene_manager/layout_manager.py#L108">查看官方代码 ↗</a><h2>set_saved_layout()</h2><p>RoboDojo/env/scene_manager/layout_manager.py:108</p><pre><code>官方代码引用（固定提交）
+
+RoboDojo/env/scene_manager/layout_manager.py
+set_saved_layout()
+提交：09bd5f5e762b949f5858ece31347ce62057b3a5e
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="encode"><a target="_blank" rel="noopener" href="https://github.com/XPolicyLab/XPolicyLab/blob/34d6135d609d46a10ccb81da24d5ddad0b4c1f7a/policy/Pi_05/model.py#L161">查看官方代码 ↗</a><h2>encode_obs()</h2><p>XPolicyLab/policy/Pi_05/model.py:161</p><pre><code>官方代码引用（固定提交）
+
+XPolicyLab/policy/Pi_05/model.py
+encode_obs()
+提交：34d6135d609d46a10ccb81da24d5ddad0b4c1f7a
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="pack"><a target="_blank" rel="noopener" href="https://github.com/XPolicyLab/XPolicyLab/blob/34d6135d609d46a10ccb81da24d5ddad0b4c1f7a/utils/process_data.py#L119">查看官方代码 ↗</a><h2>pack_robot_state()</h2><p>XPolicyLab/utils/process_data.py:119</p><pre><code>官方代码引用（固定提交）
+
+XPolicyLab/utils/process_data.py
+pack_robot_state()
+提交：34d6135d609d46a10ccb81da24d5ddad0b4c1f7a
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="inference"><a target="_blank" rel="noopener" href="https://github.com/XPolicyLab/XPolicyLab/blob/34d6135d609d46a10ccb81da24d5ddad0b4c1f7a/policy/Pi_05/model.py#L128">查看官方代码 ↗</a><h2>get_action_batch()</h2><p>XPolicyLab/policy/Pi_05/model.py:128</p><pre><code>官方代码引用（固定提交）
+
+XPolicyLab/policy/Pi_05/model.py
+get_action_batch()
+提交：34d6135d609d46a10ccb81da24d5ddad0b4c1f7a
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="unpack"><a target="_blank" rel="noopener" href="https://github.com/XPolicyLab/XPolicyLab/blob/34d6135d609d46a10ccb81da24d5ddad0b4c1f7a/utils/process_data.py#L176">查看官方代码 ↗</a><h2>unpack_robot_state()</h2><p>XPolicyLab/utils/process_data.py:176</p><pre><code>官方代码引用（固定提交）
+
+XPolicyLab/utils/process_data.py
+unpack_robot_state()
+提交：34d6135d609d46a10ccb81da24d5ddad0b4c1f7a
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="deploy"><a target="_blank" rel="noopener" href="https://github.com/XPolicyLab/XPolicyLab/blob/34d6135d609d46a10ccb81da24d5ddad0b4c1f7a/policy/Pi_05/deploy.py#L1">查看官方代码 ↗</a><h2>eval_one_episode()</h2><p>XPolicyLab/policy/Pi_05/deploy.py:1</p><pre><code>官方代码引用（固定提交）
+
+XPolicyLab/policy/Pi_05/deploy.py
+eval_one_episode()
+提交：34d6135d609d46a10ccb81da24d5ddad0b4c1f7a
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="takeAction"><a target="_blank" rel="noopener" href="https://github.com/RoboDojo-Benchmark/RoboDojo/blob/09bd5f5e762b949f5858ece31347ce62057b3a5e/src/eval_client/eval_env.py#L358">查看官方代码 ↗</a><h2>take_action_batch()</h2><p>RoboDojo/src/eval_client/eval_env.py:358</p><pre><code>官方代码引用（固定提交）
+
+RoboDojo/src/eval_client/eval_env.py
+take_action_batch()
+提交：09bd5f5e762b949f5858ece31347ce62057b3a5e
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="score"><a target="_blank" rel="noopener" href="https://github.com/RoboDojo-Benchmark/RoboDojo/blob/09bd5f5e762b949f5858ece31347ce62057b3a5e/task/RoboDojo/tasks/stack_blocks.py#L44">查看官方代码 ↗</a><h2>get_score()</h2><p>RoboDojo/task/RoboDojo/tasks/stack_blocks.py:44</p><pre><code>官方代码引用（固定提交）
+
+RoboDojo/task/RoboDojo/tasks/stack_blocks.py
+get_score()
+提交：09bd5f5e762b949f5858ece31347ce62057b3a5e
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="reward"><a target="_blank" rel="noopener" href="https://github.com/RoboDojo-Benchmark/RoboDojo/blob/09bd5f5e762b949f5858ece31347ce62057b3a5e/env/reward_manager/reward_manager.py#L589">查看官方代码 ↗</a><h2>_score_for_state()</h2><p>RoboDojo/env/reward_manager/reward_manager.py:589</p><pre><code>官方代码引用（固定提交）
+
+RoboDojo/env/reward_manager/reward_manager.py
+_score_for_state()
+提交：09bd5f5e762b949f5858ece31347ce62057b3a5e
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="runEval"><a target="_blank" rel="noopener" href="https://github.com/RoboDojo-Benchmark/RoboDojo/blob/09bd5f5e762b949f5858ece31347ce62057b3a5e/src/eval_client/eval_env.py#L771">查看官方代码 ↗</a><h2>run_eval()</h2><p>RoboDojo/src/eval_client/eval_env.py:771</p><pre><code>官方代码引用（固定提交）
+
+RoboDojo/src/eval_client/eval_env.py
+run_eval()
+提交：09bd5f5e762b949f5858ece31347ce62057b3a5e
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="displacement"><a target="_blank" rel="noopener" href="https://github.com/RoboTwin-Platform/RoboTwin/blob/ea8b21121ebb3cd201ff5b3fe361944ac94eda3f/envs/_base_task.py#L1423">查看官方代码 ↗</a><h2>move_by_displacement()</h2><p>RoboTwin/envs/_base_task.py:1423</p><pre><code>官方代码引用（固定提交）
+
+RoboTwin/envs/_base_task.py
+move_by_displacement()
+提交：ea8b21121ebb3cd201ff5b3fe361944ac94eda3f
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="move"><a target="_blank" rel="noopener" href="https://github.com/RoboTwin-Platform/RoboTwin/blob/ea8b21121ebb3cd201ff5b3fe361944ac94eda3f/envs/_base_task.py#L957">查看官方代码 ↗</a><h2>move()</h2><p>RoboTwin/envs/_base_task.py:957</p><pre><code>官方代码引用（固定提交）
+
+RoboTwin/envs/_base_task.py
+move()
+提交：ea8b21121ebb3cd201ff5b3fe361944ac94eda3f
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="retime"><a target="_blank" rel="noopener" href="https://github.com/NVlabs/curobo/blob/d64c4b005459db10c5dd867d8b30a87d5bda9bdb/src/curobo/wrap/reacher/motion_gen.py#L1312">查看官方代码 ↗</a><h2>retime_trajectory()</h2><p>third_party/curobo_robotwin/src/curobo/wrap/reacher/motion_gen.py:1312</p><pre><code>官方代码引用（固定提交）
+
+third_party/curobo_robotwin/src/curobo/wrap/reacher/motion_gen.py
+retime_trajectory()
+提交：d64c4b005459db10c5dd867d8b30a87d5bda9bdb
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="grippers"><a target="_blank" rel="noopener" href="https://github.com/RoboTwin-Platform/RoboTwin/blob/ea8b21121ebb3cd201ff5b3fe361944ac94eda3f/envs/robot/planner.py#L247">查看官方代码 ↗</a><h2>plan_grippers()</h2><p>RoboTwin/envs/robot/planner.py:247</p><pre><code>官方代码引用（固定提交）
+
+RoboTwin/envs/robot/planner.py
+plan_grippers()
+提交：ea8b21121ebb3cd201ff5b3fe361944ac94eda3f
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="policySeed"><a target="_blank" rel="noopener" href="https://github.com/XPolicyLab/XPolicyLab/blob/34d6135d609d46a10ccb81da24d5ddad0b4c1f7a/policy/Pi_05/model.py">查看官方代码 ↗</a><h2>set_policy_seed()</h2><p>XPolicyLab/policy/Pi_05/model.py:1</p><pre><code>本地实验扩展：set_policy_seed()
+
+官方文件中未找到同名函数。链接仅供查看官方基础实现，不能作为该扩展的出处。</code></pre></section><section id="reset"><a target="_blank" rel="noopener" href="https://github.com/XPolicyLab/XPolicyLab/blob/34d6135d609d46a10ccb81da24d5ddad0b4c1f7a/policy/Pi_05/model.py#L153">查看官方代码 ↗</a><h2>reset()</h2><p>XPolicyLab/policy/Pi_05/model.py:153</p><pre><code>官方代码引用（固定提交）
+
+XPolicyLab/policy/Pi_05/model.py
+reset()
+提交：34d6135d609d46a10ccb81da24d5ddad0b4c1f7a
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="nativeInfer"><a target="_blank" rel="noopener" href="https://github.com/XPolicyLab/XPolicyLab/blob/34d6135d609d46a10ccb81da24d5ddad0b4c1f7a/policy/Pi_05/openpi/src/openpi/policies/policy.py#L68">查看官方代码 ↗</a><h2>infer()</h2><p>XPolicyLab/policy/Pi_05/openpi/src/openpi/policies/policy.py:68</p><pre><code>官方代码引用（固定提交）
+
+XPolicyLab/policy/Pi_05/openpi/src/openpi/policies/policy.py
+infer()
+提交：34d6135d609d46a10ccb81da24d5ddad0b4c1f7a
+
+点击“查看官方代码”打开原始实现。</code></pre></section><section id="obs"><a target="_blank" rel="noopener" href="https://github.com/RoboTwin-Platform/RoboTwin/blob/ea8b21121ebb3cd201ff5b3fe361944ac94eda3f/envs/_base_task.py#L438">查看官方代码 ↗</a><h2>get_obs()</h2><p>RoboTwin/envs/_base_task.py:438</p><pre><code>官方代码引用（固定提交）
+
+RoboTwin/envs/_base_task.py
+get_obs()
+提交：ea8b21121ebb3cd201ff5b3fe361944ac94eda3f
+
+点击“查看官方代码”打开原始实现。</code></pre></section></main></html>
