@@ -45,14 +45,29 @@ async function initComparison(host){
  table.append(head,body);wrap.append(table);host.prepend(wrap);
  const review=make('section');review.className='fold-diagnostics';wrap.after(review);
  try{const response=await fetch('fold-diagnostics.json');if(!response.ok)throw Error(response.status);const diagnostics=await response.json();
- review.append(make('h3','评分点到位情况'),make('p','✓ 到位，— 未到位。LS／RS：左右衣袖；LH／RH：左右衣角。到位要求对应的 X、Y 范围同时通过。'));
- for(const [phase,title] of [['first','首次折衣摆后'],['final','运行结束时']]){
- review.append(make('h4',title));const scroll=make('div');scroll.className='diagnostic-scroll';const table=make('table'),thead=make('thead'),tr=make('tr');for(const name of ['运行','帧','左袖 LS','右袖 RS','左角 LH','右角 RH','夹角 < 45°','夹爪全开','最终成功','观察结果'])tr.append(make('th',name));thead.append(tr);const tbody=make('tbody');
- for(const row of diagnostics.rows){const sample=row[phase],tr=make('tr');const mark=v=>v?'✓':'—';const vals=['R'+row.repeat_id,sample.frame,...['LS','RS','LH','RH','angle'].map(k=>mark(sample.passed[k])),mark(sample.grippers_open),mark(row.success),row.note];vals.forEach((value,i)=>{const cell=make('td',String(value));if(value==='✓')cell.className='check-pass';if(value==='—')cell.className='check-fail';tr.append(cell);});tbody.append(tr);}
- table.append(thead,tbody);scroll.append(table);review.append(scroll);
+ const adjustedIds=new Set([10,15,19]);
+ const direct=diagnostics.rows.filter(r=>r.success&&!adjustedIds.has(r.repeat_id));
+ const adjusted=diagnostics.rows.filter(r=>r.success&&adjustedIds.has(r.repeat_id));
+ const failed=diagnostics.rows.filter(r=>!r.success);
+ const mark=v=>v?'✓':'—';
+ const points=r=>['LS','RS','LH','RH','angle'].map(k=>mark(r.final.passed[k]));
+ const pointHeaders=['左袖 LS','右袖 RS','左角 LH','右角 RH','夹角 < 45°'];
+ function resultTable(title,headers,rows,kind){
+  const block=make('section');block.className='outcome-group '+kind;block.append(make('h4',title));
+  const scroll=make('div');scroll.className='diagnostic-scroll';const table=make('table'),thead=make('thead'),head=make('tr'),tbody=make('tbody');headers.forEach(name=>head.append(make('th',name)));thead.append(head);
+  rows.forEach(values=>{const row=make('tr');values.forEach(value=>{const cell=make('td',String(value));if(value==='✓')cell.className='check-pass';if(value==='—')cell.className='check-fail';row.append(cell);});tbody.append(row);});table.append(thead,tbody);scroll.append(table);block.append(scroll);review.append(block);
  }
+ review.append(make('p','✓ 到位，— 未到位。LS／RS：左右衣袖；LH／RH：左右衣角。评分点取运行结束时的记录。'));
+ review.append(make('h3','成功'));
+ resultTable('一次成功',['运行','策略 seed','成功帧',...pointHeaders],direct.map(r=>['R'+r.repeat_id,r.policy_seed,r.final.frame,...points(r)]),'direct-success');
+ resultTable('调整后成功',['运行','策略 seed','首次折叠帧','成功帧',...pointHeaders],adjusted.map(r=>['R'+r.repeat_id,r.policy_seed,r.first.frame,r.final.frame,...points(r)]),'adjusted-success');
+ const explanation=make('p','R10、R15、R19 首次 LH 和衣摆夹角未通过，重新抓取调整后成功。');review.querySelector('.adjusted-success h4').after(explanation);
+ review.append(make('h3','未成功'));
+ const failureNotes={5:'RS 未折到位。',7:'LH 未到位，RS 后续也偏出范围。',8:'LH 与衣摆夹角未通过。',9:'首次几何通过，后续 RH 偏出范围。',12:'LH 与夹角未通过；中途 RH 也曾偏出范围。',14:'末帧几何通过，但夹爪未全开，完整成功未达成。'};
+ resultTable('',['运行','得分',...pointHeaders,'夹爪全开','未完成情况'],failed.map(r=>['R'+r.repeat_id,r.score,...points(r),mark(r.final.grippers_open),failureNotes[r.repeat_id]]),'failed-runs');
+ review.querySelector('.failed-runs h4').remove();
  const evidence=make('a','下载逐项判定数据');evidence.href='fold-diagnostics.json';evidence.target='_blank';review.append(evidence);
- review.append(make('p','首次表取本批首次折衣摆后张开夹爪的采样帧；末帧表反映最终几何状态。原始分数还受阶段记录与完整成功条件约束。'));
+
  }catch(e){review.textContent='评分点汇总加载失败，请刷新重试。';}
 
  }
