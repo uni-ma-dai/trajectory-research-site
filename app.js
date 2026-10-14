@@ -71,5 +71,8 @@ $('copy-path').addEventListener('click',async()=>{if(!activeSource)return;const 
 Object.assign(sources, window.SOURCE_REFERENCES || {});
 renderFlow();renderLayers();
 
-const expertVideo=document.getElementById('expert-video');
-if(expertVideo){document.getElementById('expert-play').onclick=async()=>{try{await expertVideo.play();}catch(error){if(error.name!=='AbortError')document.getElementById('expert-play').textContent='重新播放';}};document.getElementById('expert-stop').onclick=()=>{expertVideo.pause();expertVideo.currentTime=0;};}
+document.querySelectorAll('.expert-embodiment-videos article').forEach(card=>{
+ const video=card.querySelector('video'),play=card.querySelector('[data-expert-play]');
+ play.onclick=async()=>{try{await video.play();}catch(error){if(error.name!=='AbortError')play.textContent='重新播放';}};
+ card.querySelector('[data-expert-stop]').onclick=()=>{video.pause();video.currentTime=0;};
+});

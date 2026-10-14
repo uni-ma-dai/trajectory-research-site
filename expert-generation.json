@@ -1,22 +1,109 @@
 {
   "task": "stack_blocks_two",
-  "config": "demo_clean",
-  "embodiment": "aloha-agilex",
-  "save_freq": 5,
-  "status": "completed",
-  "seeds": [
-    0
-  ],
-  "success_checks": [
-    true,
-    true
-  ],
-  "elapsed_seconds": 115.87,
-  "video_frames": 847,
-  "state_action_pairs": 846,
-  "video_fps": 30,
-  "video_seconds": 28.234,
-  "source_commit": "c234d95",
-  "generator": "scripts/collect_data.py",
-  "source_state": "isolated committed RoboTwin source; working edits excluded"
+  "embodiments": [
+    {
+      "task": "stack_blocks_two",
+      "config": "demo_clean",
+      "embodiment": "aloha-agilex",
+      "save_freq": 5,
+      "status": "completed",
+      "seeds": [
+        0
+      ],
+      "success_checks": [
+        true,
+        true
+      ],
+      "elapsed_seconds": 115.87,
+      "video": "expert-media/aloha-agilex.mp4",
+      "video_frames": 847,
+      "state_action_pairs": 846,
+      "video_fps": 30,
+      "source_commit": "c234d95"
+    },
+    {
+      "task": "stack_blocks_two",
+      "config": "demo_clean",
+      "embodiment": "piper",
+      "save_freq": 5,
+      "arm_distance": 0.6,
+      "status": "completed",
+      "seeds": [
+        0
+      ],
+      "success_checks": [
+        true,
+        true
+      ],
+      "elapsed_seconds": 104.22,
+      "video": "expert-media/piper.mp4",
+      "video_frames": 996,
+      "state_action_pairs": 995,
+      "video_fps": 30,
+      "source_commit": "0f31f04"
+    },
+    {
+      "task": "stack_blocks_two",
+      "config": "demo_clean",
+      "embodiment": "franka-panda",
+      "save_freq": 5,
+      "arm_distance": 0.6,
+      "status": "completed",
+      "seeds": [
+        0
+      ],
+      "success_checks": [
+        true,
+        true
+      ],
+      "elapsed_seconds": 95.21,
+      "video": "expert-media/franka-panda.mp4",
+      "video_frames": 780,
+      "state_action_pairs": 779,
+      "video_fps": 30,
+      "source_commit": "0f31f04"
+    },
+    {
+      "task": "stack_blocks_two",
+      "config": "demo_clean",
+      "embodiment": "ARX-X5",
+      "save_freq": 5,
+      "arm_distance": 0.6,
+      "status": "completed",
+      "seeds": [
+        0
+      ],
+      "success_checks": [
+        true,
+        true
+      ],
+      "elapsed_seconds": 93.66,
+      "video": "expert-media/ARX-X5.mp4",
+      "video_frames": 948,
+      "state_action_pairs": 947,
+      "video_fps": 30,
+      "source_commit": "0f31f04"
+    },
+    {
+      "task": "stack_blocks_two",
+      "config": "demo_clean",
+      "embodiment": "ur5-wsg",
+      "save_freq": 5,
+      "arm_distance": 0.6,
+      "status": "completed",
+      "seeds": [
+        0
+      ],
+      "success_checks": [
+        true,
+        true
+      ],
+      "elapsed_seconds": 90.01,
+      "video": "expert-media/ur5-wsg.mp4",
+      "video_frames": 797,
+      "state_action_pairs": 796,
+      "video_fps": 30,
+      "source_commit": "0f31f04"
+    }
+  ]
 }
