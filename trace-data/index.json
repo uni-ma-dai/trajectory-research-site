@@ -1,15 +1,26 @@
 [
   {
     "label": "搭塔 · 回合 1 · 未成功 · 1050 步",
-    "src": "trace-data/build-tower-fail-1/episode.json"
+    "src": "trace-data/build-tower-fail-1/episode.json",
+    "task": "build_tower",
+    "episode": 1
   },
   {
     "label": "搭塔 · 回合 4 · 成功 · 741 步",
-    "src": "trace-data/build-tower-success-4/episode.json"
+    "src": "trace-data/build-tower-success-4/episode.json",
+    "task": "build_tower",
+    "episode": 4
   },
   {
     "label": "搭塔 · 回合 12 · 未成功 · 1050 步",
     "episode": 12,
-    "src": "trace-data/build-tower-fail-12/episode.json"
+    "src": "trace-data/build-tower-fail-12/episode.json",
+    "task": "build_tower"
+  },
+  {
+    "label": "拧螺丝 · 回合 4 · 未成功 · 1900 步",
+    "task": "fasten_screws",
+    "episode": 4,
+    "src": "trace-data/fasten-screws-fail-4/episode.json"
   }
 ]
