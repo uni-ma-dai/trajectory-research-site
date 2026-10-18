@@ -160,7 +160,7 @@ $('folder-input').onchange = async e => {
     catalogue.forEach((item, i) => { const option = document.createElement('option'); option.value = i; option.textContent = item.label; $('episode-select').append(option); });
     $('episode-select').disabled = false;
     const params = new URLSearchParams(location.search);
-    const selected = Math.max(0, catalogue.findIndex(item => String(item.episode) === params.get('episode')));
+    const selected = Math.max(0, catalogue.findIndex(item => String(item.episode) === params.get('episode') && (!params.has('task') || item.task === params.get('task'))));
     $('episode-select').value = String(selected);
     if (catalogue.length) await loadRemote(catalogue[selected], Number(params.get('step') || 0));
   } catch (e) { status(`无法读取在线样例：${e.message}。可导入本地导出文件夹。`, true); }

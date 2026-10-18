@@ -90,3 +90,7 @@ CUDA_VISIBLE_DEVICES=0 XLA_PYTHON_CLIENT_PREALLOCATE=false python scripts/export
 当前只支持此 Pi0.5 配置、50 动作、默认 10 步采样和 640×480 输入；遇到
 不匹配会报错。完成后自动给同目录 episode.json 添加可选 attention 字段。
 `attention.js` / `attention.css` 实现展示；无注意力的旧导出包仍可使用。
+
+## Fasten screws episode 4
+
+`trace-data/fasten-screws-fail-4/` contains the original failed precision rerun episode 4: 1900 control steps, 38 policy inferences, all three camera videos, lossless observation/model-input images and 50-step action chunks. Exported from `fasten_screws/layout-000004/attempt-1792297155237711763`; no attention was computed. Every inference observation is checked against its decoded video frame by the exporter. Direct link: `trajectory.html?task=fasten_screws&episode=4`. Task-qualified links distinguish episodes with the same index across tasks; legacy `?episode=12` remains supported.
