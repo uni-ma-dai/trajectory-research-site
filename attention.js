@@ -35,6 +35,7 @@ function updateAttention() {
   const c=chunkForFrame(frame), entry=c.attention?.maps?.[camera], rows=entry?.weights;
   const valid=Array.isArray(rows)&&rows.length===16&&rows.every(r=>Array.isArray(r)&&r.length===16&&r.every(v=>Number.isFinite(v)&&v>=0));
   const toggle=document.getElementById('attention-toggle');toggle.disabled=!valid;
+  attentionControls.hidden=!valid;
   const enabled=toggle.checked&&valid;
   for(const kind of ['raw','model']){
     const img=document.getElementById(`${kind}-attention`);img.hidden=!enabled;img.style.opacity=document.getElementById('attention-opacity').value;

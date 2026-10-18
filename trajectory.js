@@ -128,13 +128,14 @@ $('scrubber').oninput = e => seek(Number(e.target.value));
 $('speed').onchange = e => { video.playbackRate = Number(e.target.value); };
 $('camera-select').onchange = e => { if (episode) changeCamera(e.target.value); };
 document.addEventListener('keydown', e => { if (!episode || /INPUT|SELECT|TEXTAREA|BUTTON|SUMMARY/.test(e.target.tagName)) return; if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); seek(frame + (e.key === 'ArrowLeft' ? -1 : 1)); } });
-async function loadRemote(item) {
+async function loadRemote(item, startFrame = 0) {
   const token = ++generation; video.pause(); status('正在加载回合…');
   try {
     const url = new URL(item.src, location.href); const response = await fetch(url);
     if (!response.ok) throw Error(`HTTP ${response.status}`);
     const data = validate(await response.json()); if (token !== generation) return;
     revokeFiles(); useEpisode(data, path => new URL(assetPath(path), url).href, item.label);
+    if (Number.isFinite(startFrame) && startFrame > 0) seek(startFrame);
   } catch (e) { if (token === generation) { $('viewer').hidden = true; status(`加载失败：${e.message}。也可以导入本地导出文件夹。`, true); } }
 }
 $('episode-select').onchange = e => { const item = catalogue[Number(e.target.value)]; if (item) loadRemote(item); };
@@ -157,6 +158,10 @@ $('folder-input').onchange = async e => {
     const response = await fetch('trace-data/index.json'); if (!response.ok) throw Error(`HTTP ${response.status}`);
     catalogue = await response.json(); $('episode-select').replaceChildren();
     catalogue.forEach((item, i) => { const option = document.createElement('option'); option.value = i; option.textContent = item.label; $('episode-select').append(option); });
-    $('episode-select').disabled = false; if (catalogue.length) await loadRemote(catalogue[0]);
+    $('episode-select').disabled = false;
+    const params = new URLSearchParams(location.search);
+    const selected = Math.max(0, catalogue.findIndex(item => String(item.episode) === params.get('episode')));
+    $('episode-select').value = String(selected);
+    if (catalogue.length) await loadRemote(catalogue[selected], Number(params.get('step') || 0));
   } catch (e) { status(`无法读取在线样例：${e.message}。可导入本地导出文件夹。`, true); }
 })();
