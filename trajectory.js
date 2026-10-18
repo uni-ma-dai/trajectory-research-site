@@ -89,6 +89,7 @@ function render(n) {
   if (activeChunk !== c.id) {
     activeChunk = c.id;
     $('raw-image').src = resolveAsset(assetPath(c.images[camera].raw)); $('model-image').src = resolveAsset(assetPath(c.images[camera].model));
+    document.dispatchEvent(new Event('trace-observation'));
     for (const b of $('camera-thumbs').children) { const key = b.dataset.camera; b.querySelector('img').src = resolveAsset(assetPath(c.images[key].model)); b.classList.toggle('selected', key === camera); }
     for (const [i, b] of [...$('chunk-track').children].entries()) { b.classList.toggle('selected', i === c.id); b.setAttribute('aria-pressed', String(i === c.id)); }
     const cells = $('action-cells'); cells.replaceChildren();

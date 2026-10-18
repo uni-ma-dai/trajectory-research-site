@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>观测与动作时间轴 · 轨迹实验</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="trajectory.css"></head>
+<title>观测与动作时间轴 · 轨迹实验</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="trajectory.css"><link rel="stylesheet" href="attention.css"></head>
 <body class="trace-page"><header class="topbar"><a class="brand" href="index.html">轨迹实验</a><nav aria-label="页面导航"><a href="evaluation.html">π0.5 评测</a><a href="trajectory.html" aria-current="page">观测与动作时间轴</a><a href="https://github.com/uni-ma-dai/trajectory-research-site">GitHub</a></nav></header>
 <main>
 <div class="trace-heading"><div><div class="eyebrow">RECORDED POLICY TRACE · π0.5</div><h1>看见、预测，然后执行。</h1><p>沿着一次 rollout，追踪视频、模型观测与 action chunk 的对应关系。</p></div><span class="record-tag">真实记录 · 离线回放</span></div>
@@ -21,4 +21,4 @@
 <section class="chunk-panel"><div class="panel-heading"><h2 id="chunk-title"></h2><span id="chunk-range"></span></div><div class="chunk-summary" id="chunk-summary"></div><div id="action-cells" class="action-cells" aria-label="当前 chunk 的动作位置"></div><p id="action-caption"></p><details><summary>查看完整预测动作与记录时间</summary><p>动作维度：左臂 6 关节 + 左夹爪 + 右臂 6 关节 + 右夹爪。关节为弧度，夹爪为归一化值。</p><p id="wall-timing"></p><pre id="action-values"></pre></details></section>
 <details class="evidence"><summary>数据来源与对齐精度</summary><p id="instruction"></p><p id="alignment"></p><p><strong>没有记录相机独立采集时间和缓存年龄。</strong>观测标记表示发起推理时的控制步；不能据此证明相机采集延迟为零。PNG 展示的是保存的原始 / 预处理像素，不是从 MP4 截图重新 resize。</p><p id="provenance"></p><a id="download-json" download>下载本回合时间轴与完整动作 JSON</a></details>
 </div><footer class="trace-footer">先用视频发现问题，再用记录核对每一次决策。<a href="evaluation.html">返回评测汇总 ↗</a></footer>
-</main><script src="trajectory.js" defer></script></body></html>
+</main><script src="trajectory.js" defer></script><script src="attention.js" defer></script></body></html>

@@ -1,6 +1,6 @@
 # 轨迹研究地图
 
-公开静态汇报快照。包含代码阅读摘录、实验图表、视频及评分点叠加；不包含模型权重、原始观测或完整研究源码。
+公开静态汇报快照。包含代码阅读摘录、实验图表、视频、选定回合观测和注意力叠加；不包含模型权重或完整研究源码。
 
 https://uni-ma-dai.github.io/trajectory-research-site/
 
@@ -45,3 +45,33 @@ NPZ 需先导出，单个 MP4 无法提供完整对应关系。
 本地预览：`python scripts/serve_viewer.py`，打开
 `http://127.0.0.1:8767/trajectory.html`。该服务器支持视频字节范围请求，
 保证 Chrome 可以精确拖动 MP4；普通 `python -m http.server` 不支持此能力。
+
+### 动作对图像的注意力
+
+时间轴的“叠加模型注意力”支持原始图、模型输入及三路相机，强度可调。
+两个样例共 36 次观测均使用保存的 raw_input、rng_before 和同一 checkpoint
+离线重放；预处理数组逐元素相等，重放的最终 50×14 动作与记录最大误差均为 0。
+这是重放所得注意力，不是原运行捕获的权重。网页只显示预计算结果。
+
+提取动作生成阶段 Gemma softmax 的 action-query → image-key 权重，平均
+50 个动作 query、所有 heads、18 层和 10 次 flow 去噪。SigLIP So400m/14 的
+224×224 输入对应每相机 16×16 个 patch。顺序为 head、left wrist、right wrist。
+原始浮点权重和各相机总权重保存在 attention.json 与 episode.json；总权重包含
+padding，三路图像总和小于 1，因为还存在文本等其他 key。颜色/透明度按同次
+观测三相机共同最大值缩放，不支持跨观测直接比较颜色。插值不增加空间精度。
+原图叠加去掉上下各 28px padding，再映射回 640×480。
+注意力不是因果重要性；也没有对每个单独动作做归因或 attention rollout。
+
+在相同 OpenPI 环境、空闲 GPU 上运行（先用上面的脚本导出回合）：
+
+```bash
+CUDA_VISIBLE_DEVICES=0 XLA_PYTHON_CLIENT_PREALLOCATE=false python scripts/export_attention.py \
+  --source /path/to/attempt-TIMESTAMP --output /path/to/export/attention \
+  --checkpoint /path/to/RoboDojo-sim-arx_x5-joint-0/59999
+```
+
+依赖原项目的 OpenPI PYTHONPATH、JAX、Flax 和权重。脚本只在自己的进程中
+包装注意力方法，不修改模型源码，不启动仿真器，不操作其他评测进程。
+当前只支持此 Pi0.5 配置、50 动作、默认 10 步采样和 640×480 输入；遇到
+不匹配会报错。完成后自动给同目录 episode.json 添加可选 attention 字段。
+`attention.js` / `attention.css` 实现展示；无注意力的旧导出包仍可使用。
