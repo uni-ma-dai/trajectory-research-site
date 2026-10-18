@@ -1,0 +1,10 @@
+[
+  {
+    "label": "搭塔 · 回合 1 · 未成功 · 1050 步",
+    "src": "trace-data/build-tower-fail-1/episode.json"
+  },
+  {
+    "label": "搭塔 · 回合 4 · 成功 · 741 步",
+    "src": "trace-data/build-tower-success-4/episode.json"
+  }
+]

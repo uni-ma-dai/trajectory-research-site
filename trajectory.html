@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>观测与动作时间轴 · 轨迹实验</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="trajectory.css"></head>
+<body class="trace-page"><header class="topbar"><a class="brand" href="index.html">轨迹实验</a><nav aria-label="页面导航"><a href="evaluation.html">π0.5 评测</a><a href="trajectory.html" aria-current="page">观测与动作时间轴</a><a href="https://github.com/uni-ma-dai/trajectory-research-site">GitHub</a></nav></header>
+<main>
+<div class="trace-heading"><div><div class="eyebrow">RECORDED POLICY TRACE · π0.5</div><h1>看见、预测，然后执行。</h1><p>沿着一次 rollout，追踪视频、模型观测与 action chunk 的对应关系。</p></div><span class="record-tag">真实记录 · 离线回放</span></div>
+<section class="trace-toolbar" aria-label="数据选择"><label>回合<select id="episode-select" disabled><option>正在加载记录…</option></select></label><label>相机<select id="camera-select"><option value="head">头部相机</option><option value="left">左腕相机</option><option value="right">右腕相机</option></select></label><label class="file-button">导入回合文件夹<input id="folder-input" type="file" webkitdirectory multiple></label><span id="outcome" class="outcome"></span></section>
+<p id="status" role="status" aria-live="polite">正在读取真实轨迹…</p>
+<div id="viewer" hidden>
+<div class="trace-stats"><div><span>控制动作</span><strong id="total-steps"></strong></div><div><span>模型推理</span><strong id="total-inferences"></strong></div><div><span>当前视频帧 / 控制状态</span><strong id="frame-number"></strong></div><div><span>当前推理编号</span><strong id="infer-number"></strong></div></div>
+<section class="visual-grid" aria-label="视频与观测对比">
+ <article class="video-panel"><div class="panel-heading"><h2>执行视频</h2><span id="video-clock"></span></div><video id="video" controls playsinline preload="metadata" aria-label="当前相机执行视频"></video><div class="video-footer"><span id="frame-context"></span><span>视频时间 ≠ 实际运行耗时</span></div></article>
+ <article class="observation-panel"><div class="panel-heading"><h2>这组动作依据的观测</h2><span id="observation-step"></span></div><div class="image-pair"><figure><img id="raw-image" alt="当前推理使用的原始相机图像"><figcaption>原始观测 <span>640 × 480 · 无损 PNG</span></figcaption></figure><figure><img id="model-image" alt="当前推理预处理后的模型输入图像"><figcaption>模型实际输入 <span>224 × 224 · 无损 PNG</span></figcaption></figure></div><p id="observation-explanation"></p><div class="camera-thumbs" id="camera-thumbs"></div></article>
+</section>
+<section class="timeline-panel" aria-labelledby="timeline-title"><div class="panel-heading"><h2 id="timeline-title">观测 → Action chunk → 下一次推理</h2><span>点击色块跳到该次观测</span></div>
+<div class="transport"><button id="prev-frame" type="button" aria-label="上一帧">← 帧</button><button id="play-toggle" type="button">播放</button><button id="next-frame" type="button" aria-label="下一帧">帧 →</button><span class="divider"></span><button id="prev-chunk" type="button">上一推理</button><button id="next-chunk" type="button">下一推理</button><label>速度<select id="speed"><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select></label></div>
+<div class="timeline-wrap"><div id="chunk-track" class="chunk-track" aria-label="按推理分段的执行时间轴"></div><div id="playhead" class="playhead"></div></div>
+<label class="sr-only" for="scrubber">选择视频帧</label><input id="scrubber" class="scrubber" type="range" min="0" max="1" step="1" value="0"><div class="axis-labels"><span>帧 0</span><span id="axis-mid"></span><span id="axis-end"></span></div>
+<div class="legend"><span>◆ 色块起点：请求下一次推理</span><span>实色：已执行动作</span><span>斜纹：预测了但未执行</span><span>末帧：终止状态</span></div>
+</section>
+<section class="chunk-panel"><div class="panel-heading"><h2 id="chunk-title"></h2><span id="chunk-range"></span></div><div class="chunk-summary" id="chunk-summary"></div><div id="action-cells" class="action-cells" aria-label="当前 chunk 的动作位置"></div><p id="action-caption"></p><details><summary>查看完整预测动作与记录时间</summary><p>动作维度：左臂 6 关节 + 左夹爪 + 右臂 6 关节 + 右夹爪。关节为弧度，夹爪为归一化值。</p><p id="wall-timing"></p><pre id="action-values"></pre></details></section>
+<details class="evidence"><summary>数据来源与对齐精度</summary><p id="instruction"></p><p id="alignment"></p><p><strong>没有记录相机独立采集时间和缓存年龄。</strong>观测标记表示发起推理时的控制步；不能据此证明相机采集延迟为零。PNG 展示的是保存的原始 / 预处理像素，不是从 MP4 截图重新 resize。</p><p id="provenance"></p><a id="download-json" download>下载本回合时间轴与完整动作 JSON</a></details>
+</div><footer class="trace-footer">先用视频发现问题，再用记录核对每一次决策。<a href="evaluation.html">返回评测汇总 ↗</a></footer>
+</main><script src="trajectory.js" defer></script></body></html>
