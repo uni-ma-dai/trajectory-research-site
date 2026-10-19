@@ -94,3 +94,7 @@ CUDA_VISIBLE_DEVICES=0 XLA_PYTHON_CLIENT_PREALLOCATE=false python scripts/export
 ## Fasten screws episode 4
 
 `trace-data/fasten-screws-fail-4/` contains the original failed precision rerun episode 4: 1900 control steps, 38 policy inferences, all three camera videos, lossless observation/model-input images and 50-step action chunks. Exported from `fasten_screws/layout-000004/attempt-1792297155237711763`; no attention was computed. Every inference observation is checked against its decoded video frame by the exporter. Direct link: `trajectory.html?task=fasten_screws&episode=4`. Task-qualified links distinguish episodes with the same index across tasks; legacy `?episode=12` remains supported.
+
+## RoboTwin latest evaluation snapshot
+
+`evaluation.html` now leads with the 2026-10-19 snapshot of the three recorded 25-episode RoboTwin runs. `evaluation-results.json.robotwin_latest` stores per-configuration counts, source run names and environment seeds. Rates use completed episodes only; incomplete configurations show their progress. The original 100-episode RoboTwin results and historical RoboDojo results remain separate. This is a static snapshot, not a live connection to the servers.
