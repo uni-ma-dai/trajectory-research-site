@@ -98,3 +98,7 @@ CUDA_VISIBLE_DEVICES=0 XLA_PYTHON_CLIENT_PREALLOCATE=false python scripts/export
 ## RoboTwin latest evaluation snapshot
 
 `evaluation.html` now leads with the 2026-10-19 snapshot of the three recorded 25-episode RoboTwin runs. `evaluation-results.json.robotwin_latest` stores per-configuration counts, source run names and environment seeds. Rates use completed episodes only; incomplete configurations show their progress. The original 100-episode RoboTwin results and historical RoboDojo results remain separate. This is a static snapshot, not a live connection to the servers.
+
+## RoboDojo latest evaluation snapshot
+
+The 2026-10-19 RoboDojo section uses the latest formal recorded run per task/configuration (2026-10-16 baseline, 10-17 batch, 10-18 precision rerun, and 10-19 charger/balls rerun). It contains 48 complete configurations of 54 and 1927 completed episodes of 2100. Per-layout outcomes recompute rates and mean stage scores; 10-19 shards are disjoint and merged by layout_id. Smoke/preflight/pilot runs and superseded reruns are excluded. Partial/missing configurations are explicit and not reported as actively running. Original RoboDojo and RoboTwin historical aggregates remain intact. Provenance is in `evaluation-results.json.robodojo_latest`.
